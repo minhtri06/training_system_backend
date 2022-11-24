@@ -5,12 +5,12 @@ namespace backend.Models
         public int Id { get; set; }
         public string? Name { get; set; }
 
-        public ICollection<LearningPath> LearningPaths { get; set; }
+        public ICollection<DepartmentLearningPath> DepartmentLearningPaths { get; set; }
         public ICollection<Trainee> Trainees { get; set; }
 
         public Department()
         {
-            LearningPaths = new List<LearningPath>();
+            DepartmentLearningPaths = new List<DepartmentLearningPath>();
             Trainees = new List<Trainee>();
         }
     }

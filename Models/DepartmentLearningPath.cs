@@ -6,6 +6,6 @@ namespace backend.Models
         public int LearningPathId { get; set; }
 
         public Department? Department { get; set; }
-        public Role? Role { get; set; }
+        public LearningPath? LearningPath { get; set; }
     }
 }
