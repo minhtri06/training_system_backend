@@ -29,7 +29,6 @@ namespace backend.Models
             {
                 e.HasKey("Id");
                 e.Property(c => c.Name).IsRequired().HasMaxLength(50);
-                e.Property(c => c.CourseId).IsRequired();
             });
 
             modelBuilder.Entity<Course>(e =>
@@ -74,6 +73,10 @@ namespace backend.Models
             {
                 e.HasKey("Id");
                 e.Property(l => l.Name).IsRequired().HasMaxLength(50);
+
+                e.HasOne(l => l.ForRole)
+                    .WithMany(r => r.LearningPaths)
+                    .OnDelete(DeleteBehavior.SetNull);
             });
 
             modelBuilder.Entity<LearningPathCertificate>(e =>
@@ -116,6 +119,10 @@ namespace backend.Models
                 e.Property(t => t.SystemRole).IsRequired().HasMaxLength(50);
                 e.Property(t => t.passwordHash).IsRequired().HasMaxLength(250);
                 e.Property(t => t.PasswordSalt).IsRequired().HasMaxLength(250);
+
+                e.HasOne(t => t.Role)
+                    .WithMany(r => r.Trainees)
+                    .OnDelete(DeleteBehavior.SetNull);
             });
 
             modelBuilder.Entity<TraineeClass>(e =>

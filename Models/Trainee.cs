@@ -11,9 +11,6 @@ namespace backend.Models
         public string? passwordHash { get; set; }
         public string? PasswordSalt { get; set; }
 
-        public int RoleId { get; set; }
-        public int DepartmentId { get; set; }
-
         public Role? Role { get; set; }
         public Department? Department { get; set; }
         public ICollection<TraineeClass> TraineeClasses { get; set; }
