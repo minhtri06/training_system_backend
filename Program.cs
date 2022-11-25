@@ -1,4 +1,6 @@
 using backend.Models;
+using backend.Services.Interfaces;
+using backend.Services.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 });
 
 // Add Scoped
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
 var app = builder.Build();
 
