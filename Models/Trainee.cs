@@ -6,11 +6,13 @@ namespace backend.Models
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Level { get; set; }
-        public SystemRole? SystemRole { get; set; }
+        public SystemRole SystemRole { get; set; }
         public string? ImgLink { get; set; }
-        public string? username { get; set; }
-        public string? passwordHash { get; set; }
-        public string? PasswordSalt { get; set; }
+        public string username { get; set; } = null!;
+        public string passwordHash { get; set; } = null!;
+        public string PasswordSalt { get; set; } = null!;
+        public int? RoleId { get; set; }
+        public int? DepartmentId { get; set; }
 
         public Role? Role { get; set; }
         public Department? Department { get; set; }

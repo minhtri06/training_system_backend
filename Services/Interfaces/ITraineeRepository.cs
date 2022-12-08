@@ -5,8 +5,9 @@ namespace backend.Services.Interfaces
 {
     public interface ITraineeRepository
     {
-        TraineeDto CreateTrainee(NewTraineeDto newTrainee);
-        ICollection<Trainee> GetAllTrainees();
         bool CheckUsernameExist(string username);
+        TraineeDto? GetTraineeById(int traineeId);
+        TraineeDto CreateTrainee(NewTraineeDto newTrainee);
+        IQueryable<TraineeDto> GetAllTrainees();
     }
 }
