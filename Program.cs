@@ -20,6 +20,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 
 // Add Scoped
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<ITraineeRepository, TraineeRepository>();
 
 var app = builder.Build();
 
@@ -28,7 +29,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+} 
 
 app.UseHttpsRedirection();
 

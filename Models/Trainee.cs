@@ -8,6 +8,7 @@ namespace backend.Models
         public string? Level { get; set; }
         public SystemRole? SystemRole { get; set; }
         public string? ImgLink { get; set; }
+        public string? username { get; set; }
         public string? passwordHash { get; set; }
         public string? PasswordSalt { get; set; }
 

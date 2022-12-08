@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "HZvg133fCzLPTUDS7TUWQvHcNwm46V3BOX2mutE6wGWuDN/FuDz002tbWuLYCSuptbdgGHn6SKbzcUNExsq8Dg==",
+  "dgSpecHash": "TjXizLzUog1gOCEI1tgqVi/7X3dECTrr9BsA52kzJYB/R/0ImVCe3iqP4NX+PoKS+DgmEhrzCt57pABMkJI8Ug==",
   "success": true,
   "projectFilePath": "/home/pmtri/Documents/app development/project/backend/backend.csproj",
   "expectedPackageFiles": [
     "/home/pmtri/.nuget/packages/azure.core/1.24.0/azure.core.1.24.0.nupkg.sha512",
     "/home/pmtri/.nuget/packages/azure.identity/1.6.0/azure.identity.1.6.0.nupkg.sha512",
     "/home/pmtri/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
+    "/home/pmtri/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/6.0.6/microsoft.aspnetcore.authentication.jwtbearer.6.0.6.nupkg.sha512",
     "/home/pmtri/.nuget/packages/microsoft.bcl.asyncinterfaces/1.1.1/microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "/home/pmtri/.nuget/packages/microsoft.csharp/4.5.0/microsoft.csharp.4.5.0.nupkg.sha512",
     "/home/pmtri/.nuget/packages/microsoft.data.sqlclient/5.0.1/microsoft.data.sqlclient.5.0.1.nupkg.sha512",
