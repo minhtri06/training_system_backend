@@ -29,12 +29,22 @@ namespace backend.Models
             {
                 e.HasKey("Id");
                 e.Property(c => c.Name).IsRequired().HasMaxLength(50);
+
+                e.HasOne(c => c.Course)
+                    .WithMany(course => course.Classes)
+                    .HasForeignKey(c => c.CourseId)
+                    .OnDelete(DeleteBehavior.SetNull);
             });
 
             modelBuilder.Entity<Course>(e =>
             {
                 e.HasKey("Id");
                 e.Property(c => c.Name).IsRequired().HasMaxLength(50);
+
+                e.HasOne(c => c.Trainer)
+                    .WithMany(t => t.Courses)
+                    .HasForeignKey(c => c.TrainerId)
+                    .OnDelete(DeleteBehavior.SetNull);
             });
 
             modelBuilder.Entity<CourseCertificate>(e =>
@@ -76,6 +86,7 @@ namespace backend.Models
 
                 e.HasOne(l => l.ForRole)
                     .WithMany(r => r.LearningPaths)
+                    .HasForeignKey(l => l.ForRoleId)
                     .OnDelete(DeleteBehavior.SetNull);
             });
 
@@ -123,10 +134,12 @@ namespace backend.Models
 
                 e.HasOne(t => t.Role)
                     .WithMany(r => r.Trainees)
+                    .HasForeignKey(t => t.RoleId)
                     .OnDelete(DeleteBehavior.SetNull);
 
                 e.HasOne(t => t.Department)
                     .WithMany(d => d.Trainees)
+                    .HasForeignKey(t => t.DepartmentId)
                     .OnDelete(DeleteBehavior.SetNull);
             });
 

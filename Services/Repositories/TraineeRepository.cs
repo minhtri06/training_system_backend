@@ -88,9 +88,6 @@ namespace backend.Services.Repositories
                 username = newTraineeDto.Username,
                 passwordHash = passwordHash,
                 PasswordSalt = salt,
-                RoleId = role != null ? newTraineeDto.RoleId : null,
-                DepartmentId =
-                    department != null ? newTraineeDto.DepartmentId : null,
                 Role = role,
                 Department = department,
             };

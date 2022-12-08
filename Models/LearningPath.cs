@@ -6,6 +6,7 @@ namespace backend.Models
         public string? Name { get; set; }
         public string? Description { get; set; }
         public string? ImgLink { get; set; }
+        public int? ForRoleId { get; set; }
 
         public Role? ForRole { get; set; }
         public ICollection<DepartmentLearningPath> DepartmentLearningPaths { get; set; }

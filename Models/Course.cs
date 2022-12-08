@@ -9,6 +9,7 @@ namespace backend.Models
         public string? LearningObjective { get; set; }
         public string? ImgLink { get; set; }
         public string? Description { get; set; }
+        public int? TrainerId { get; set; }
 
         public Trainer? Trainer { get; set; }
         public ICollection<LearningPathCourse> LearningPathCourses { get; set; }
