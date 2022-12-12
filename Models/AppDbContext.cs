@@ -128,8 +128,8 @@ namespace backend.Models
                 e.Property(t => t.FirstName).HasMaxLength(50);
                 e.Property(t => t.LastName).HasMaxLength(50);
                 e.Property(t => t.SystemRole).IsRequired().HasMaxLength(50);
-                e.Property(t => t.username).IsRequired().HasMaxLength(250);
-                e.Property(t => t.passwordHash).IsRequired().HasMaxLength(250);
+                e.Property(t => t.Username).IsRequired().HasMaxLength(250);
+                e.Property(t => t.PasswordHash).IsRequired().HasMaxLength(250);
                 e.Property(t => t.PasswordSalt).IsRequired().HasMaxLength(250);
 
                 e.HasOne(t => t.Role)

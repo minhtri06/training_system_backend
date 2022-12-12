@@ -7,7 +7,9 @@ namespace backend.Services.Interfaces
     {
         bool CheckUsernameExist(string username);
         TraineeDto? GetTraineeById(int traineeId);
-        TraineeDto CreateTrainee(NewTraineeDto newTrainee);
+
+        TraineeDto CreateTrainee(NewTraineeDto newTraineeDto);
+
         IQueryable<TraineeDto> GetAllTrainees();
     }
 }

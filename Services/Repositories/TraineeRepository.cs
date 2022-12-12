@@ -22,7 +22,7 @@ namespace backend.Services.Repositories
                 Level = trainee.Level,
                 SystemRole = trainee.SystemRole,
                 ImgLink = trainee.ImgLink,
-                username = trainee.username,
+                username = trainee.Username,
                 RoleId = trainee.RoleId,
                 DepartmentId = trainee.DepartmentId
             };
@@ -63,7 +63,7 @@ namespace backend.Services.Repositories
 
         public bool CheckUsernameExist(string username)
         {
-            return _context.Trainees.Any(t => t.username == username);
+            return _context.Trainees.Any(t => t.Username == username);
         }
 
         public TraineeDto CreateTrainee(NewTraineeDto newTraineeDto)
@@ -85,8 +85,8 @@ namespace backend.Services.Repositories
                 Level = newTraineeDto.Level,
                 SystemRole = SystemRole.Trainee,
                 ImgLink = newTraineeDto.ImgLink,
-                username = newTraineeDto.Username,
-                passwordHash = passwordHash,
+                Username = newTraineeDto.Username,
+                PasswordHash = passwordHash,
                 PasswordSalt = salt,
                 Role = role,
                 Department = department,
