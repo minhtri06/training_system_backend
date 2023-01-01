@@ -100,11 +100,11 @@ namespace backend.Services.Repositories
 
         public IQueryable<TraineeDto> GetAllTrainees()
         {
-            var trainees =
+            var traineeDtos =
                 from trainee in _context.Trainees
                 select Util.ConvertTraineeToDto(trainee);
 
-            return trainees;
+            return traineeDtos;
         }
 
         public TraineeDto? GetTraineeById(int traineeId)
