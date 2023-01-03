@@ -6,6 +6,7 @@ namespace backend.Models
     {
         public AppDbContext(DbContextOptions options) : base(options) { }
 
+        public DbSet<AdminUser> AdminUsers { get; set; } = null!;
         public DbSet<Class> Classes { get; set; } = null!;
         public DbSet<Course> Courses { get; set; } = null!;
         public DbSet<CourseCertificate> CourseCertificates { get; set; } =
@@ -19,12 +20,26 @@ namespace backend.Models
         public DbSet<LearningPathCourse> LearningPathCourses { get; set; } =
             null!;
         public DbSet<Role> Roles { get; set; } = null!;
+        public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
         public DbSet<Trainee> Trainees { get; set; } = null!;
         public DbSet<TraineeClass> TraineeClasses { get; set; } = null!;
         public DbSet<Trainer> Trainers { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<AdminUser>(e =>
+            {
+                e.HasKey("Id");
+                e.Property(au => au.Username).IsRequired();
+                e.Property(au => au.PasswordHash).IsRequired();
+                e.Property(au => au.PasswordSalt).IsRequired();
+                e.HasOne(au => au.RefreshToken)
+                    .WithOne(t => t.AdminUser)
+                    .HasForeignKey<AdminUser>(au => au.TokenId)
+                    .OnDelete(DeleteBehavior.SetNull);
+                ;
+            });
+
             modelBuilder.Entity<Class>(e =>
             {
                 e.HasKey("Id");
@@ -122,6 +137,20 @@ namespace backend.Models
                 e.Property(r => r.Name).IsRequired().HasMaxLength(50);
             });
 
+            modelBuilder.Entity<RefreshToken>(e =>
+            {
+                e.HasKey("Id");
+                e.Property(t => t.Token).IsRequired();
+                e.Property(t => t.ExpiryTime).IsRequired();
+                e.Property(t => t.CreatedTime).IsRequired();
+
+                e.HasOne(t => t.AdminUser).WithOne(au => au.RefreshToken);
+
+                e.HasOne(t => t.Trainee).WithOne(t => t.RefreshToken);
+
+                e.HasOne(t => t.Trainer).WithOne(t => t.RefreshToken);
+            });
+
             modelBuilder.Entity<Trainee>(e =>
             {
                 e.HasKey("Id");
@@ -142,6 +171,12 @@ namespace backend.Models
                     .WithMany(d => d.Trainees)
                     .HasForeignKey(t => t.DepartmentId)
                     .OnDelete(DeleteBehavior.SetNull);
+
+                e.HasOne(t => t.RefreshToken)
+                    .WithOne(t => t.Trainee)
+                    .HasForeignKey<Trainee>(t => t.TokenId)
+                    .OnDelete(DeleteBehavior.SetNull);
+                ;
             });
 
             modelBuilder.Entity<TraineeClass>(e =>
@@ -167,6 +202,11 @@ namespace backend.Models
                 e.Property(t => t.passwordHash).IsRequired().HasMaxLength(250);
                 e.Property(t => t.PasswordSalt).IsRequired().HasMaxLength(250);
                 e.HasIndex(t => t.Username).IsUnique();
+
+                e.HasOne(t => t.RefreshToken)
+                    .WithOne(t => t.Trainer)
+                    .HasForeignKey<Trainer>(t => t.TokenId)
+                    .OnDelete(DeleteBehavior.SetNull);
             });
         }
     }

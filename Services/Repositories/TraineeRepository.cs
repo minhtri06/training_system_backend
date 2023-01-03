@@ -1,56 +1,11 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
-
 using backend.Dto.Trainee;
 using backend.Models;
 using backend.Services.Interfaces;
+using backend.Dto.Login;
+using backend.Dto.Token;
 
 namespace backend.Services.Repositories
 {
-    internal class Util
-    {
-        public static TraineeDto ConvertTraineeToDto(Trainee trainee)
-        {
-            return new TraineeDto()
-            {
-                Id = trainee.Id,
-                FirstName = trainee.FirstName,
-                LastName = trainee.LastName,
-                Level = trainee.Level,
-                SystemRole = trainee.SystemRole,
-                ImgLink = trainee.ImgLink,
-                username = trainee.Username,
-                RoleId = trainee.RoleId,
-                DepartmentId = trainee.DepartmentId
-            };
-        }
-
-        public static string GenerateSalt(int length)
-        {
-            var saltBytes = new byte[length];
-
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(saltBytes);
-                return Convert.ToBase64String(saltBytes);
-            }
-        }
-
-        public static string HashPassword(string password, string salt)
-        {
-            var passwordBytes = Encoding.UTF8.GetBytes(password);
-            var saltBytes = Encoding.UTF8.GetBytes(salt);
-
-            using (var hmac = new HMACSHA512(saltBytes))
-            {
-                return Encoding.UTF8.GetString(hmac.ComputeHash(passwordBytes));
-            }
-        }
-    }
-
     public class TraineeRepository : ITraineeRepository
     {
         private readonly AppDbContext _context;
@@ -66,6 +21,30 @@ namespace backend.Services.Repositories
             return _context.Trainees.Any(t => t.Username == username);
         }
 
+        public TraineeDto? GetTraineeByLoginInfo(LoginDto loginDto)
+        {
+            var trainee = _context.Trainees.SingleOrDefault(
+                t => t.Username == loginDto.Username
+            );
+
+            if (trainee == null)
+            {
+                return null;
+            }
+
+            var checkedPasswordHash = Utils.HashPassword(
+                loginDto.Password,
+                trainee.PasswordSalt
+            );
+
+            if (checkedPasswordHash != trainee.PasswordHash)
+            {
+                return null;
+            }
+
+            return Utils.ConvertTraineeToDto(trainee);
+        }
+
         public TraineeDto CreateTrainee(NewTraineeDto newTraineeDto)
         {
             var role = _context.Roles.SingleOrDefault(
@@ -75,8 +54,8 @@ namespace backend.Services.Repositories
                 d => d.Id == newTraineeDto.DepartmentId
             );
 
-            var salt = Util.GenerateSalt(_saltLength);
-            var passwordHash = Util.HashPassword(newTraineeDto.Password, salt);
+            var salt = Utils.GenerateSalt(_saltLength);
+            var passwordHash = Utils.HashPassword(newTraineeDto.Password, salt);
 
             var newTrainee = new Trainee()
             {
@@ -95,14 +74,14 @@ namespace backend.Services.Repositories
             _context.Trainees.Add(newTrainee);
             _context.SaveChanges();
 
-            return Util.ConvertTraineeToDto(newTrainee);
+            return Utils.ConvertTraineeToDto(newTrainee);
         }
 
         public IQueryable<TraineeDto> GetAllTrainees()
         {
             var traineeDtos =
                 from trainee in _context.Trainees
-                select Util.ConvertTraineeToDto(trainee);
+                select Utils.ConvertTraineeToDto(trainee);
 
             return traineeDtos;
         }
@@ -113,7 +92,58 @@ namespace backend.Services.Repositories
                 t => t.Id == traineeId
             );
 
-            return trainee != null ? Util.ConvertTraineeToDto(trainee) : null;
+            return trainee != null ? Utils.ConvertTraineeToDto(trainee) : null;
+        }
+
+        public TraineeDto? GetTraineeByUsername(string username)
+        {
+            var trainee = _context.Trainees.SingleOrDefault(
+                t => t.Username == username
+            );
+
+            return trainee != null ? Utils.ConvertTraineeToDto(trainee) : null;
+        }
+
+        public int AddRefreshToken(int traineeId, int TokenId)
+        {
+            var trainee = _context.Trainees.SingleOrDefault(
+                t => t.Id == traineeId
+            );
+
+            if (trainee == null)
+            {
+                return 1;
+            }
+
+            var refreshToken = _context.RefreshTokens.SingleOrDefault(
+                t => t.Id == TokenId
+            );
+
+            if (refreshToken == null)
+            {
+                return 2;
+            }
+
+            trainee.RefreshToken = refreshToken;
+
+            _context.Trainees.Update(trainee);
+            _context.SaveChanges();
+
+            return 0;
+        }
+
+        public RefreshTokenDto? GetRefreshTokenByTraineeId(int traineeId)
+        {
+            var trainee = _context.Trainees.SingleOrDefault(
+                t => t.Id == traineeId
+            );
+
+            if (trainee == null || trainee.RefreshToken == null)
+            {
+                return null;
+            }
+
+            return Utils.ConvertRefreshTokenToDto(trainee.RefreshToken);
         }
     }
 }

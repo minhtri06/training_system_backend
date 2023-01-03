@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using backend.Services.Interfaces;
 using backend.Dto.Role;
 using backend.Dto.ApiResponse;
+using Microsoft.AspNetCore.Authorization;
 
 namespace backend.Controllers
 {
@@ -18,6 +19,7 @@ namespace backend.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult GetAllRoles()
         {
             var roles = _roleRepo.GetAll();
