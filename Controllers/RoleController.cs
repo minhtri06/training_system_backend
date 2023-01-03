@@ -34,6 +34,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("{roleId}")]
+        [Authorize]
         public IActionResult GetRoleById(int roleId)
         {
             var role = _roleRepo.GetById(roleId);
@@ -60,6 +61,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateRole(NewRoleDto newRoleDto)
         {
             var newRole = _roleRepo.CreateRole(newRoleDto);
@@ -75,6 +77,7 @@ namespace backend.Controllers
         }
 
         [HttpDelete("{roleId}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteRoleById(int roleId)
         {
             var result = _roleRepo.DeleteById(roleId);
@@ -101,6 +104,7 @@ namespace backend.Controllers
         }
 
         [HttpPut("{roleId}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult UpdateRole(int roleId, UpdateRoleDto updateRoleDto)
         {
             if (_roleRepo.UpdateRole(roleId, updateRoleDto) == -1)

@@ -1,6 +1,6 @@
-namespace backend.Models
+namespace backend.Dto.AdminUser
 {
-    public class AdminUser
+    public class AdminUserDto
     {
         public int Id { get; set; }
         public string FirstName { get; set; } = null!;
@@ -11,7 +11,5 @@ namespace backend.Models
         public string ImgLink { get; set; } = null!;
         public SystemRole SystemRole { get; set; }
         public int? TokenId { get; set; }
-
-        public RefreshToken? RefreshToken { get; set; }
     }
 }

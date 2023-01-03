@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using backend.Dto.AdminUser;
 using backend.Dto.Token;
 using backend.Dto.Trainee;
 using backend.Models;
@@ -25,6 +26,35 @@ namespace backend.Services.Repositories
             };
         }
 
+        public static RefreshTokenDto ConvertRefreshTokenToDto(
+            RefreshToken refreshToken
+        )
+        {
+            return new RefreshTokenDto()
+            {
+                Id = refreshToken.Id,
+                Token = refreshToken.Token,
+                ExpiryTime = refreshToken.ExpiryTime,
+                CreatedTime = refreshToken.CreatedTime,
+            };
+        }
+
+        public static AdminUserDto ConvertAdminUserToDto(AdminUser adminUser)
+        {
+            return new AdminUserDto()
+            {
+                Id = adminUser.Id,
+                FirstName = adminUser.FirstName,
+                LastName = adminUser.LastName,
+                Username = adminUser.Username,
+                PasswordSalt = adminUser.PasswordSalt,
+                PasswordHash = adminUser.PasswordHash,
+                ImgLink = adminUser.ImgLink,
+                SystemRole = adminUser.SystemRole,
+                TokenId = adminUser.TokenId
+            };
+        }
+
         public static string GenerateSalt(int length)
         {
             var saltBytes = new byte[length];
@@ -45,19 +75,6 @@ namespace backend.Services.Repositories
             {
                 return Encoding.UTF8.GetString(hmac.ComputeHash(passwordBytes));
             }
-        }
-
-        public static RefreshTokenDto ConvertRefreshTokenToDto(
-            RefreshToken refreshToken
-        )
-        {
-            return new RefreshTokenDto()
-            {
-                Id = refreshToken.Id,
-                Token = refreshToken.Token,
-                ExpiryTime = refreshToken.ExpiryTime,
-                CreatedTime = refreshToken.CreatedTime,
-            };
         }
     }
 }
