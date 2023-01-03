@@ -28,6 +28,13 @@ namespace backend.Controllers
             public static ApiResponseDto NOT_FOUND { get; } =
                 new ApiResponseDto() { Success = false, Message = "Not found" };
 
+            public static readonly ApiResponseDto USERNAME_ALREADY_EXISTS =
+                new ApiResponseDto()
+                {
+                    Success = false,
+                    Message = "Username already exists"
+                };
+
             public static ApiResponseDto LoginSuccessfully(
                 string accessToken,
                 string refreshToken
@@ -60,6 +67,19 @@ namespace backend.Controllers
                     {
                         new { accessToken = accessToken }
                     }
+                };
+            }
+
+            public static ApiResponseDto CreateSuccessfully(
+                string objectName,
+                Object objectDto
+            )
+            {
+                return new ApiResponseDto()
+                {
+                    Success = true,
+                    Message = "Create " + objectName + " successfully",
+                    Data = new List<Object>() { objectDto }
                 };
             }
         }

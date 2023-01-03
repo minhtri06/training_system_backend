@@ -27,11 +27,11 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin, Trainer, Trainee")]
+        [Authorize]
         public IActionResult GetAllTrainees()
         {
             Console.WriteLine(SystemRole.Trainee.ToString());
-            var trainees = _traineeRepo.GetAllTrainees();
+            var trainees = _traineeRepo.GetAll();
 
             return Ok(
                 new ApiResponseDto()
@@ -44,18 +44,12 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "0")]
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateTrainee(NewTraineeDto newTraineeDto)
         {
             if (_traineeRepo.CheckUsernameExist(newTraineeDto.Username))
             {
-                return BadRequest(
-                    new ApiResponseDto()
-                    {
-                        Success = false,
-                        Message = "Username already exists"
-                    }
-                );
+                return BadRequest(Utils.CommonResponse.USERNAME_ALREADY_EXISTS);
             }
 
             if (newTraineeDto.Username.Length < 3)
@@ -80,7 +74,7 @@ namespace backend.Controllers
                 );
             }
 
-            var newTrainee = _traineeRepo.CreateTrainee(newTraineeDto);
+            var newTrainee = _traineeRepo.Create(newTraineeDto);
 
             return Ok(
                 new ApiResponseDto()
@@ -93,10 +87,10 @@ namespace backend.Controllers
         }
 
         [HttpGet("{traineeId}")]
-        [Authorize(Roles = "0, 1, 2")]
+        [Authorize]
         public IActionResult GetTraineeById(int traineeId)
         {
-            var trainee = _traineeRepo.GetTraineeById(traineeId);
+            var trainee = _traineeRepo.GetById(traineeId);
 
             if (trainee == null)
             {
@@ -116,7 +110,7 @@ namespace backend.Controllers
         [HttpPost("login")]
         public IActionResult Login(LoginDto loginDto)
         {
-            var trainee = _traineeRepo.GetTraineeByLoginInfo(loginDto);
+            var trainee = _traineeRepo.GetByLoginInfo(loginDto);
 
             if (trainee == null)
             {
@@ -182,9 +176,7 @@ namespace backend.Controllers
             RefreshTokenRequestDto refreshTokenRequestDto
         )
         {
-            var trainee = _traineeRepo.GetTraineeById(
-                refreshTokenRequestDto.UserId
-            );
+            var trainee = _traineeRepo.GetById(refreshTokenRequestDto.UserId);
 
             if (trainee == null)
             {

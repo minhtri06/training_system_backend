@@ -6,8 +6,8 @@ namespace backend.Services.Interfaces
     {
         ICollection<RoleDto> GetAll();
         RoleDto? GetById(int roleId);
-        RoleDto CreateRole(NewRoleDto newRoleDto);
+        RoleDto Create(NewRoleDto newRoleDto);
         int DeleteById(int roleId);
-        int UpdateRole(int roleId, UpdateRoleDto updateRoleDto);
+        int Update(int roleId, UpdateRoleDto updateRoleDto);
     }
 }

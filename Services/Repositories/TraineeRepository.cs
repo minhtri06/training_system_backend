@@ -9,7 +9,6 @@ namespace backend.Services.Repositories
     public class TraineeRepository : ITraineeRepository
     {
         private readonly AppDbContext _context;
-        private readonly int _saltLength = 32;
 
         public TraineeRepository(AppDbContext context)
         {
@@ -21,7 +20,7 @@ namespace backend.Services.Repositories
             return _context.Trainees.Any(t => t.Username == username);
         }
 
-        public TraineeDto? GetTraineeByLoginInfo(LoginDto loginDto)
+        public TraineeDto? GetByLoginInfo(LoginDto loginDto)
         {
             var trainee = _context.Trainees.SingleOrDefault(
                 t => t.Username == loginDto.Username
@@ -45,7 +44,7 @@ namespace backend.Services.Repositories
             return Utils.ConvertTraineeToDto(trainee);
         }
 
-        public TraineeDto CreateTrainee(NewTraineeDto newTraineeDto)
+        public TraineeDto Create(NewTraineeDto newTraineeDto)
         {
             var role = _context.Roles.SingleOrDefault(
                 r => r.Id == newTraineeDto.RoleId
@@ -54,7 +53,7 @@ namespace backend.Services.Repositories
                 d => d.Id == newTraineeDto.DepartmentId
             );
 
-            var salt = Utils.GenerateSalt(_saltLength);
+            var salt = Utils.GenerateSalt(Utils.SALT_LENGTH);
             var passwordHash = Utils.HashPassword(newTraineeDto.Password, salt);
 
             var newTrainee = new Trainee()
@@ -77,16 +76,7 @@ namespace backend.Services.Repositories
             return Utils.ConvertTraineeToDto(newTrainee);
         }
 
-        public IQueryable<TraineeDto> GetAllTrainees()
-        {
-            var traineeDtos =
-                from trainee in _context.Trainees
-                select Utils.ConvertTraineeToDto(trainee);
-
-            return traineeDtos;
-        }
-
-        public TraineeDto? GetTraineeById(int traineeId)
+        public TraineeDto? GetById(int traineeId)
         {
             var trainee = _context.Trainees.SingleOrDefault(
                 t => t.Id == traineeId
@@ -95,7 +85,16 @@ namespace backend.Services.Repositories
             return trainee != null ? Utils.ConvertTraineeToDto(trainee) : null;
         }
 
-        public TraineeDto? GetTraineeByUsername(string username)
+        public IQueryable<TraineeDto> GetAll()
+        {
+            var traineeDtos =
+                from trainee in _context.Trainees
+                select Utils.ConvertTraineeToDto(trainee);
+
+            return traineeDtos;
+        }
+
+        public TraineeDto? GetByUsername(string username)
         {
             var trainee = _context.Trainees.SingleOrDefault(
                 t => t.Username == username

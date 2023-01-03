@@ -64,7 +64,7 @@ namespace backend.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult CreateRole(NewRoleDto newRoleDto)
         {
-            var newRole = _roleRepo.CreateRole(newRoleDto);
+            var newRole = _roleRepo.Create(newRoleDto);
 
             return Ok(
                 new ApiResponseDto()
@@ -107,7 +107,7 @@ namespace backend.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult UpdateRole(int roleId, UpdateRoleDto updateRoleDto)
         {
-            if (_roleRepo.UpdateRole(roleId, updateRoleDto) == -1)
+            if (_roleRepo.Update(roleId, updateRoleDto) == -1)
             {
                 return NotFound(
                     new ApiResponseDto()

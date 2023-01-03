@@ -9,6 +9,8 @@ namespace backend.Services.Repositories
 {
     internal class Utils
     {
+        public static readonly int SALT_LENGTH = 32;
+
         public static TraineeDto ConvertTraineeToDto(Trainee trainee)
         {
             return new TraineeDto()

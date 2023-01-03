@@ -33,6 +33,9 @@ namespace backend.Models
                 e.Property(au => au.Username).IsRequired();
                 e.Property(au => au.PasswordHash).IsRequired();
                 e.Property(au => au.PasswordSalt).IsRequired();
+
+                e.HasIndex(au => au.Username).IsUnique();
+
                 e.HasOne(au => au.RefreshToken)
                     .WithOne(t => t.AdminUser)
                     .HasForeignKey<AdminUser>(au => au.TokenId)

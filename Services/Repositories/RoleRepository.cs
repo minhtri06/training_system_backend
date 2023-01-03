@@ -29,7 +29,7 @@ namespace backend.Services.Repositories
             return null;
         }
 
-        public RoleDto CreateRole(NewRoleDto newRoleDto)
+        public RoleDto Create(NewRoleDto newRoleDto)
         {
             var newRole = new Role() { Name = newRoleDto.Name };
 
@@ -52,7 +52,7 @@ namespace backend.Services.Repositories
             return roleId;
         }
 
-        public int UpdateRole(int roleId, UpdateRoleDto updateRoleDto)
+        public int Update(int roleId, UpdateRoleDto updateRoleDto)
         {
             var role = _context.Roles.SingleOrDefault(r => r.Id == roleId);
 

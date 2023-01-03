@@ -7,11 +7,11 @@ namespace backend.Services.Interfaces
     public interface ITraineeRepository
     {
         bool CheckUsernameExist(string username);
-        TraineeDto? GetTraineeByLoginInfo(LoginDto loginDto);
-        TraineeDto? GetTraineeById(int traineeId);
-        TraineeDto? GetTraineeByUsername(string username);
-        TraineeDto CreateTrainee(NewTraineeDto newTraineeDto);
-        IQueryable<TraineeDto> GetAllTrainees();
+        TraineeDto? GetByLoginInfo(LoginDto loginDto);
+        TraineeDto? GetById(int traineeId);
+        IQueryable<TraineeDto> GetAll();
+        TraineeDto? GetByUsername(string username);
+        TraineeDto Create(NewTraineeDto newTraineeDto);
         int AddRefreshToken(int traineeId, int TokenId);
         RefreshTokenDto? GetRefreshTokenByTraineeId(int traineeId);
     }
