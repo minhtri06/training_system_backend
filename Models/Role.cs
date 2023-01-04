@@ -3,7 +3,7 @@ namespace backend.Models
     public class Role
     {
         public int Id { get; set; }
-        public string? Name { get; set; }
+        public string Name { get; set; } = null!;
 
         public ICollection<Trainee> Trainees { get; set; }
         public ICollection<LearningPath> LearningPaths { get; set; }

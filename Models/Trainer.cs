@@ -3,9 +3,9 @@ namespace backend.Models
     public class Trainer
     {
         public int Id { get; set; }
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public string? ImgLink { get; set; }
+        public string FirstName { get; set; } = null!;
+        public string LastName { get; set; } = null!;
+        public string ImgLink { get; set; } = null!;
         public SystemRole SystemRole { get; set; }
         public string Username { get; set; } = null!;
         public string passwordHash { get; set; } = null!;
