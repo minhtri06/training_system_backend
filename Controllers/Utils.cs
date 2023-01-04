@@ -35,6 +35,13 @@ namespace backend.Controllers
                     Message = "username already exists"
                 };
 
+            public static readonly ApiResponseDto WRONG_REFRESH_TOKEN =
+                new ApiResponseDto()
+                {
+                    Success = false,
+                    Message = "wrong refresh token"
+                };
+
             public static ApiResponseDto LoginSuccessfully(
                 string accessToken,
                 string refreshToken

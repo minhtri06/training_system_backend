@@ -211,6 +211,11 @@ namespace backend.Controllers
                     );
                 }
 
+                if (refreshToken.Token != refreshTokenRequestDto.RefreshToken)
+                {
+                    return BadRequest(Utils.CommonResponse.WRONG_REFRESH_TOKEN);
+                }
+
                 // If refresh token is expired
                 if (refreshToken.ExpiryTime < DateTime.UtcNow)
                 {

@@ -215,6 +215,11 @@ namespace backend.Controllers
                     );
                 }
 
+                if (refreshToken.Token != refreshTokenRequestDto.RefreshToken)
+                {
+                    return BadRequest(Utils.CommonResponse.WRONG_REFRESH_TOKEN);
+                }
+
                 if (refreshToken.ExpiryTime < DateTime.UtcNow)
                 {
                     return StatusCode(403, Utils.CommonResponse.FORBIDDEN);
