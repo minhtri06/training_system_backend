@@ -3,9 +3,9 @@ namespace backend.Models
     public class LearningPath
     {
         public int Id { get; set; }
-        public string? Name { get; set; }
-        public string? Description { get; set; }
-        public string? ImgLink { get; set; }
+        public string Name { get; set; } = null!;
+        public string Description { get; set; } = null!;
+        public string ImgLink { get; set; } = null!;
         public int? ForRoleId { get; set; }
 
         public Role? ForRole { get; set; }
