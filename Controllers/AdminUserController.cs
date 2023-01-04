@@ -40,7 +40,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin")]
         public IActionResult CreateAdminUser(NewAdminUserDto newAdminUserDto)
         {
             if (_adminUserRepo.CheckUsernameExist(newAdminUserDto.Username))
