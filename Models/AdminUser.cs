@@ -10,7 +10,7 @@ namespace backend.Models
         public string PasswordHash { get; set; } = null!;
         public string ImgLink { get; set; } = null!;
         public SystemRole SystemRole { get; set; }
-        public int? TokenId { get; set; }
+        public int? RefreshTokenId { get; set; }
 
         public RefreshToken? RefreshToken { get; set; }
     }

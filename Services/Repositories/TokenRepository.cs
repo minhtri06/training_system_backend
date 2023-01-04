@@ -101,16 +101,11 @@ namespace backend.Services.Repositories
             return Utils.ConvertRefreshTokenToDto(newRefreshToken);
         }
 
-        public int RenewRefreshToken(int tokenId, string token)
+        public void RenewRefreshToken(int tokenId, string token)
         {
-            var refreshToken = _context.RefreshTokens.SingleOrDefault(
+            var refreshToken = _context.RefreshTokens.Single(
                 t => t.Id == tokenId
             );
-
-            if (refreshToken == null)
-            {
-                return 1;
-            }
 
             refreshToken.Token = token;
             refreshToken.CreatedTime = DateTime.UtcNow;
@@ -120,8 +115,6 @@ namespace backend.Services.Repositories
 
             _context.RefreshTokens.Update(refreshToken);
             _context.SaveChanges();
-
-            return 0;
         }
     }
 }

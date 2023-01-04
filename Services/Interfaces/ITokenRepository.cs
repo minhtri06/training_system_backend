@@ -15,6 +15,6 @@ namespace backend.Services.Interfaces
         string GenerateRefreshTokenString();
         RefreshTokenDto? GetRefreshTokenById(int refreshTokenId);
         RefreshTokenDto CreateRefreshToken(string refreshToken);
-        int RenewRefreshToken(int tokenId, string refreshToken);
+        void RenewRefreshToken(int tokenId, string refreshToken);
     }
 }

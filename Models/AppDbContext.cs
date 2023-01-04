@@ -38,7 +38,7 @@ namespace backend.Models
 
                 e.HasOne(au => au.RefreshToken)
                     .WithOne(t => t.AdminUser)
-                    .HasForeignKey<AdminUser>(au => au.TokenId)
+                    .HasForeignKey<AdminUser>(au => au.RefreshTokenId)
                     .OnDelete(DeleteBehavior.SetNull);
                 ;
             });

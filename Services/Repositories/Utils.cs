@@ -49,11 +49,9 @@ namespace backend.Services.Repositories
                 FirstName = adminUser.FirstName,
                 LastName = adminUser.LastName,
                 Username = adminUser.Username,
-                PasswordSalt = adminUser.PasswordSalt,
-                PasswordHash = adminUser.PasswordHash,
                 ImgLink = adminUser.ImgLink,
                 SystemRole = adminUser.SystemRole,
-                TokenId = adminUser.TokenId
+                RefreshTokenId = adminUser.RefreshTokenId
             };
         }
 

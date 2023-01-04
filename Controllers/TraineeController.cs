@@ -110,65 +110,65 @@ namespace backend.Controllers
         [HttpPost("login")]
         public IActionResult Login(LoginDto loginDto)
         {
-            var trainee = _traineeRepo.GetByLoginInfo(loginDto);
-
-            if (trainee == null)
+            try
             {
-                return Unauthorized(
-                    Utils.CommonResponse.WRONG_USERNAME_OR_PASSWORD
-                );
-            }
+                var trainee = _traineeRepo.GetByLoginInfo(loginDto);
 
-            var newAccessToken = _tokenRepo.GenerateAccessTokenString(
-                trainee.Id,
-                trainee.FirstName,
-                trainee.Username,
-                trainee.SystemRole
-            );
-
-            var newRefreshToken = _tokenRepo.GenerateRefreshTokenString();
-
-            // If trainee does not have a token
-            if (trainee.RefreshTokenId == null)
-            {
-                var newToken = _tokenRepo.CreateRefreshToken(newRefreshToken);
-
-                if (_traineeRepo.AddRefreshToken(trainee.Id, newToken.Id) != 0)
+                if (trainee == null)
                 {
-                    return StatusCode(
-                        500,
-                        Utils.CommonResponse.SOMETHING_WENT_WRONG
+                    return Unauthorized(
+                        Utils.CommonResponse.WRONG_USERNAME_OR_PASSWORD
                     );
                 }
 
+                var newAccessTokenString = _tokenRepo.GenerateAccessTokenString(
+                    trainee.Id,
+                    trainee.FirstName,
+                    trainee.Username,
+                    trainee.SystemRole
+                );
+                var newRefreshTokenString =
+                    _tokenRepo.GenerateRefreshTokenString();
+
+                // If trainee does not have a token
+                if (trainee.RefreshTokenId == null)
+                {
+                    var newRefreshToken = _tokenRepo.CreateRefreshToken(
+                        newRefreshTokenString
+                    );
+                    _traineeRepo.AddRefreshToken(
+                        trainee.Id,
+                        newRefreshToken.Id
+                    );
+
+                    return Ok(
+                        Utils.CommonResponse.LoginSuccessfully(
+                            newAccessTokenString,
+                            newRefreshTokenString
+                        )
+                    );
+                }
+
+                // If trainee already has a token
+                _tokenRepo.RenewRefreshToken(
+                    (int)trainee.RefreshTokenId,
+                    newRefreshTokenString
+                );
+
                 return Ok(
                     Utils.CommonResponse.LoginSuccessfully(
-                        newAccessToken,
-                        newRefreshToken
+                        newAccessTokenString,
+                        newRefreshTokenString
                     )
                 );
             }
-
-            // If trainee already have a token
-            if (
-                _tokenRepo.RenewRefreshToken(
-                    (int)trainee.RefreshTokenId,
-                    newRefreshToken
-                ) != 0
-            )
+            catch (Exception ex)
             {
                 return StatusCode(
                     500,
-                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                    Utils.CommonResponse.ResponseException(ex.Message)
                 );
             }
-
-            return Ok(
-                Utils.CommonResponse.LoginSuccessfully(
-                    newAccessToken,
-                    newRefreshToken
-                )
-            );
         }
 
         [HttpPost("refresh-token")]
@@ -176,56 +176,70 @@ namespace backend.Controllers
             RefreshTokenRequestDto refreshTokenRequestDto
         )
         {
-            var trainee = _traineeRepo.GetById(refreshTokenRequestDto.UserId);
-
-            if (trainee == null)
+            try
             {
-                return NotFound(
-                    new ApiResponseDto()
-                    {
-                        Success = false,
-                        Message = "Trainee not found",
-                    }
+                var trainee = _traineeRepo.GetById(
+                    refreshTokenRequestDto.UserId
+                );
+
+                if (trainee == null)
+                {
+                    return NotFound(
+                        new ApiResponseDto()
+                        {
+                            Success = false,
+                            Message = "Trainee not found",
+                        }
+                    );
+                }
+
+                if (trainee.RefreshTokenId == null)
+                {
+                    return BadRequest(
+                        new ApiResponseDto()
+                        {
+                            Success = false,
+                            Message = "You doesn't have a token"
+                        }
+                    );
+                }
+
+                var refreshToken = _tokenRepo.GetRefreshTokenById(
+                    (int)trainee.RefreshTokenId
+                );
+                if (refreshToken == null)
+                {
+                    return StatusCode(
+                        500,
+                        Utils.CommonResponse.SOMETHING_WENT_WRONG
+                    );
+                }
+
+                if (refreshToken.ExpiryTime < DateTime.UtcNow)
+                {
+                    return StatusCode(403, Utils.CommonResponse.FORBIDDEN);
+                }
+
+                var newAccessToken = _tokenRepo.GenerateAccessTokenString(
+                    trainee.Id,
+                    trainee.FirstName,
+                    trainee.Username,
+                    trainee.SystemRole
+                );
+
+                return Ok(
+                    Utils.CommonResponse.RefreshTokenSuccessfully(
+                        newAccessToken
+                    )
                 );
             }
-
-            if (trainee.RefreshTokenId == null)
-            {
-                return BadRequest(
-                    new ApiResponseDto()
-                    {
-                        Success = false,
-                        Message = "You doesn't have a token"
-                    }
-                );
-            }
-
-            var refreshToken = _tokenRepo.GetRefreshTokenById(
-                (int)trainee.RefreshTokenId
-            );
-            if (refreshToken == null)
+            catch (Exception ex)
             {
                 return StatusCode(
                     500,
-                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                    Utils.CommonResponse.ResponseException(ex.Message)
                 );
             }
-
-            if (refreshToken.ExpiryTime < DateTime.UtcNow)
-            {
-                return StatusCode(403, Utils.CommonResponse.FORBIDDEN);
-            }
-
-            var newAccessToken = _tokenRepo.GenerateAccessTokenString(
-                trainee.Id,
-                trainee.FirstName,
-                trainee.Username,
-                trainee.SystemRole
-            );
-
-            return Ok(
-                Utils.CommonResponse.RefreshTokenSuccessfully(newAccessToken)
-            );
         }
     }
 }

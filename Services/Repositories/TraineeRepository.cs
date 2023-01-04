@@ -103,32 +103,25 @@ namespace backend.Services.Repositories
             return trainee != null ? Utils.ConvertTraineeToDto(trainee) : null;
         }
 
-        public int AddRefreshToken(int traineeId, int TokenId)
+        public void AddRefreshToken(int traineeId, int TokenId)
         {
-            var trainee = _context.Trainees.SingleOrDefault(
-                t => t.Id == traineeId
-            );
+            var trainee = _context.Trainees.Single(t => t.Id == traineeId);
 
-            if (trainee == null)
+            if (trainee.RefreshToken != null)
             {
-                return 1;
+                throw new Exception(
+                    "Admin user already have a token, we cannot add another token"
+                );
             }
 
-            var refreshToken = _context.RefreshTokens.SingleOrDefault(
+            var refreshToken = _context.RefreshTokens.Single(
                 t => t.Id == TokenId
             );
-
-            if (refreshToken == null)
-            {
-                return 2;
-            }
 
             trainee.RefreshToken = refreshToken;
 
             _context.Trainees.Update(trainee);
             _context.SaveChanges();
-
-            return 0;
         }
 
         public RefreshTokenDto? GetRefreshTokenByTraineeId(int traineeId)

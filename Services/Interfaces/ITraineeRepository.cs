@@ -12,7 +12,7 @@ namespace backend.Services.Interfaces
         IQueryable<TraineeDto> GetAll();
         TraineeDto? GetByUsername(string username);
         TraineeDto Create(NewTraineeDto newTraineeDto);
-        int AddRefreshToken(int traineeId, int TokenId);
+        void AddRefreshToken(int traineeId, int TokenId);
         RefreshTokenDto? GetRefreshTokenByTraineeId(int traineeId);
     }
 }

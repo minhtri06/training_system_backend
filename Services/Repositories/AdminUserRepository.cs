@@ -1,4 +1,5 @@
 using backend.Dto.AdminUser;
+using backend.Dto.Login;
 using backend.Models;
 using backend.Services.Interfaces;
 
@@ -27,6 +28,30 @@ namespace backend.Services.Repositories
             return adminUser != null
                 ? Utils.ConvertAdminUserToDto(adminUser)
                 : null;
+        }
+
+        public AdminUserDto? GetByLoginInfo(LoginDto loginDto)
+        {
+            var adminUser = _context.AdminUsers.SingleOrDefault(
+                au => au.Username == loginDto.Username
+            );
+
+            if (adminUser == null)
+            {
+                return null;
+            }
+
+            var checkedPasswordHash = Utils.HashPassword(
+                loginDto.Password,
+                adminUser.PasswordSalt
+            );
+
+            if (checkedPasswordHash != adminUser.PasswordHash)
+            {
+                return null;
+            }
+
+            return Utils.ConvertAdminUserToDto(adminUser);
         }
 
         public IQueryable<AdminUserDto> GetAll()
@@ -74,6 +99,12 @@ namespace backend.Services.Repositories
                 return null;
             }
 
+            if (adminUser.RefreshToken != null)
+            {
+                _context.RefreshTokens.Remove(adminUser.RefreshToken);
+                _context.SaveChanges();
+            }
+
             _context.AdminUsers.Remove(adminUser);
             _context.SaveChanges();
 
@@ -99,6 +130,29 @@ namespace backend.Services.Repositories
             _context.SaveChanges();
 
             return Utils.ConvertAdminUserToDto(adminUser);
+        }
+
+        public void AddRefreshToken(int adminUserId, int TokenId)
+        {
+            var adminUser = _context.AdminUsers.Single(
+                t => t.Id == adminUserId
+            );
+
+            if (adminUser.RefreshToken != null)
+            {
+                throw new Exception(
+                    "Admin user already have a token, we cannot add another token"
+                );
+            }
+
+            var refreshToken = _context.RefreshTokens.Single(
+                t => t.Id == TokenId
+            );
+
+            adminUser.RefreshToken = refreshToken;
+
+            _context.AdminUsers.Update(adminUser);
+            _context.SaveChanges();
         }
     }
 }

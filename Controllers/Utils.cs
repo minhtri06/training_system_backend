@@ -1,6 +1,6 @@
 using backend.Dto.ApiResponse;
 using backend.Dto.Token;
-using backend.Models;
+using backend.Services.Interfaces;
 
 namespace backend.Controllers
 {
@@ -12,27 +12,27 @@ namespace backend.Controllers
                 new ApiResponseDto()
                 {
                     Success = false,
-                    Message = "Something went wrong"
+                    Message = "something went wrong"
                 };
 
             public static ApiResponseDto WRONG_USERNAME_OR_PASSWORD { get; } =
                 new ApiResponseDto()
                 {
                     Success = false,
-                    Message = "Wrong username or password"
+                    Message = "wrong username or password"
                 };
 
             public static ApiResponseDto FORBIDDEN { get; } =
-                new ApiResponseDto() { Success = false, Message = "Forbidden" };
+                new ApiResponseDto() { Success = false, Message = "forbidden" };
 
             public static ApiResponseDto NOT_FOUND { get; } =
-                new ApiResponseDto() { Success = false, Message = "Not found" };
+                new ApiResponseDto() { Success = false, Message = "not found" };
 
             public static readonly ApiResponseDto USERNAME_ALREADY_EXISTS =
                 new ApiResponseDto()
                 {
                     Success = false,
-                    Message = "Username already exists"
+                    Message = "username already exists"
                 };
 
             public static ApiResponseDto LoginSuccessfully(
@@ -43,7 +43,7 @@ namespace backend.Controllers
                 return new ApiResponseDto()
                 {
                     Success = true,
-                    Message = "Login successfully",
+                    Message = "login successfully",
                     Data = new List<TokenResponseDto>()
                     {
                         new TokenResponseDto()
@@ -62,7 +62,7 @@ namespace backend.Controllers
                 return new ApiResponseDto()
                 {
                     Success = true,
-                    Message = "Refresh token successfully",
+                    Message = "refresh token successfully",
                     Data = new List<Object>()
                     {
                         new { accessToken = accessToken }
@@ -70,7 +70,7 @@ namespace backend.Controllers
                 };
             }
 
-            public static ApiResponseDto CreateSuccessfully(
+            public static ApiResponseDto CreateObjectSuccessfully(
                 string objectName,
                 Object objectDto
             )
@@ -78,8 +78,65 @@ namespace backend.Controllers
                 return new ApiResponseDto()
                 {
                     Success = true,
-                    Message = "Create " + objectName + " successfully",
+                    Message = "create " + objectName + " successfully",
                     Data = new List<Object>() { objectDto }
+                };
+            }
+
+            public static ApiResponseDto ObjectNotFound(string objectName)
+            {
+                return new ApiResponseDto()
+                {
+                    Success = false,
+                    Message = objectName + " not found"
+                };
+            }
+
+            public static ApiResponseDto GetObjectSuccessfully(
+                string objectName,
+                Object objectDto
+            )
+            {
+                return new ApiResponseDto()
+                {
+                    Success = true,
+                    Message = "get " + objectName + " successfully",
+                    Data = new List<Object>() { objectDto }
+                };
+            }
+
+            public static ApiResponseDto DeleteObjectSuccessfully(
+                string objectName,
+                Object objectDto
+            )
+            {
+                return new ApiResponseDto()
+                {
+                    Success = true,
+                    Message = "delete " + objectName + " successfully",
+                    Data = new List<Object>() { objectDto }
+                };
+            }
+
+            public static ApiResponseDto GetAllObjectsSuccessfully(
+                string objectName,
+                IQueryable<Object> objectDtos
+            )
+            {
+                return new ApiResponseDto()
+                {
+                    Success = true,
+                    Message = "get all " + objectName + " successfully",
+                    Data = objectDtos
+                };
+            }
+
+            public static ApiResponseDto ResponseException(string exception)
+            {
+                return new ApiResponseDto()
+                {
+                    Success = false,
+                    Message = exception,
                 };
             }
         }
