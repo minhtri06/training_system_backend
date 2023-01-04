@@ -177,7 +177,7 @@ namespace backend.Models
 
                 e.HasOne(t => t.RefreshToken)
                     .WithOne(t => t.Trainee)
-                    .HasForeignKey<Trainee>(t => t.TokenId)
+                    .HasForeignKey<Trainee>(t => t.RefreshTokenId)
                     .OnDelete(DeleteBehavior.SetNull);
                 ;
             });
@@ -208,7 +208,7 @@ namespace backend.Models
 
                 e.HasOne(t => t.RefreshToken)
                     .WithOne(t => t.Trainer)
-                    .HasForeignKey<Trainer>(t => t.TokenId)
+                    .HasForeignKey<Trainer>(t => t.RefreshTokenId)
                     .OnDelete(DeleteBehavior.SetNull);
             });
         }
