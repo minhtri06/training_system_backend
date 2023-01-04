@@ -10,7 +10,7 @@ namespace backend.Models
         public string Username { get; set; } = null!;
         public string passwordHash { get; set; } = null!;
         public string PasswordSalt { get; set; } = null!;
-        public int? TokenId { get; set; }
+        public int? RefreshTokenId { get; set; }
 
         public RefreshToken? RefreshToken { get; set; }
         public ICollection<Course> Courses { get; set; }

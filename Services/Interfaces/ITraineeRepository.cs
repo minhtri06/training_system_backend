@@ -13,6 +13,5 @@ namespace backend.Services.Interfaces
         TraineeDto? GetByUsername(string username);
         TraineeDto Create(NewTraineeDto newTraineeDto);
         void AddRefreshToken(int traineeId, int TokenId);
-        RefreshTokenDto? GetRefreshTokenByTraineeId(int traineeId);
     }
 }

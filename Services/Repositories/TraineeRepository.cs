@@ -107,7 +107,7 @@ namespace backend.Services.Repositories
         {
             var trainee = _context.Trainees.Single(t => t.Id == traineeId);
 
-            if (trainee.RefreshToken != null)
+            if (trainee.RefreshTokenId != null)
             {
                 throw new Exception(
                     "Admin user already have a token, we cannot add another token"
@@ -122,20 +122,6 @@ namespace backend.Services.Repositories
 
             _context.Trainees.Update(trainee);
             _context.SaveChanges();
-        }
-
-        public RefreshTokenDto? GetRefreshTokenByTraineeId(int traineeId)
-        {
-            var trainee = _context.Trainees.SingleOrDefault(
-                t => t.Id == traineeId
-            );
-
-            if (trainee == null || trainee.RefreshToken == null)
-            {
-                return null;
-            }
-
-            return Utils.ConvertRefreshTokenToDto(trainee.RefreshToken);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace backend.Services.Repositories
                 Username = trainee.Username,
                 RoleId = trainee.RoleId,
                 DepartmentId = trainee.DepartmentId,
-                RefreshTokenId = trainee.TokenId
+                RefreshTokenId = trainee.RefreshTokenId
             };
         }
 

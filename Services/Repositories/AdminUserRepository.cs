@@ -99,9 +99,12 @@ namespace backend.Services.Repositories
                 return null;
             }
 
-            if (adminUser.RefreshToken != null)
+            if (adminUser.RefreshTokenId != null)
             {
-                _context.RefreshTokens.Remove(adminUser.RefreshToken);
+                var refreshToken = _context.RefreshTokens.Single(
+                    rt => rt.Id == adminUser.RefreshTokenId
+                );
+                _context.RefreshTokens.Remove(refreshToken);
                 _context.SaveChanges();
             }
 
@@ -138,7 +141,7 @@ namespace backend.Services.Repositories
                 t => t.Id == adminUserId
             );
 
-            if (adminUser.RefreshToken != null)
+            if (adminUser.RefreshTokenId != null)
             {
                 throw new Exception(
                     "Admin user already have a token, we cannot add another token"

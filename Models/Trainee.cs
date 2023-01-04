@@ -13,7 +13,7 @@ namespace backend.Models
         public string PasswordSalt { get; set; } = null!;
         public int? RoleId { get; set; }
         public int? DepartmentId { get; set; }
-        public int? TokenId { get; set; }
+        public int? RefreshTokenId { get; set; }
 
         public Role? Role { get; set; }
         public Department? Department { get; set; }
