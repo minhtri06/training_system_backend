@@ -16,17 +16,7 @@ namespace backend.Services.Repositories
         public ICollection<CourseDto> GetAll()
         {
             return _context.Courses
-                .Select(c => new CourseDto() 
-                { 
-                    Id = c.Id, 
-                    Name = c.Name, 
-                    Online = c.Online,
-                    Duration = c.Duration,
-                    LearningObjective = c.LearningObjective,
-                    ImgLink = c.ImgLink,
-                    Description = c.Description,
-                    TrainerId = c.TrainerId
-                })
+                .Select(c => Utils.DtoConversion.ConvertCourse(c))
                 .ToList();
         }
 
@@ -35,22 +25,16 @@ namespace backend.Services.Repositories
             var course = _context.Courses.SingleOrDefault(c => c.Id == courseId);
 
             if (course != null)
-                return new CourseDto() 
-                { 
-                    Id = course.Id, 
-                    Name = course.Name, 
-                    Online = course.Online,
-                    Duration = course.Duration,
-                    LearningObjective = course.LearningObjective,
-                    ImgLink = course.ImgLink,
-                    Description = course.Description,
-                    TrainerId = course.TrainerId
-                };
+            {
+                return Utils.DtoConversion.ConvertCourse(course);
+            }
             return null;
         }
 
         public CourseDto Create(NewCourseDto newCourseDto)
         {
+            var trainer = _context.Trainers.SingleOrDefault(t => t.Id == newCourseDto.TrainerId);
+            
             var newCourse = new Course() 
             { 
                 Name = newCourseDto.Name, 
@@ -59,23 +43,13 @@ namespace backend.Services.Repositories
                 LearningObjective = newCourseDto.LearningObjective,
                 ImgLink = newCourseDto.ImgLink,
                 Description = newCourseDto.Description,
-                TrainerId = newCourseDto.TrainerId
+                Trainer = trainer
             };
 
             _context.Courses.Add(newCourse);
             _context.SaveChanges();
 
-            return new CourseDto() 
-            { 
-                Id = newCourse.Id,
-                Name = newCourse.Name, 
-                Online = newCourse.Online,
-                Duration = newCourse.Duration,
-                LearningObjective = newCourse.LearningObjective,
-                ImgLink = newCourse.ImgLink,
-                Description = newCourse.Description,
-                TrainerId = newCourse.TrainerId
-            };
+            return Utils.DtoConversion.ConvertCourse(newCourse);
         }
 
         public int DeleteById(int courseId)

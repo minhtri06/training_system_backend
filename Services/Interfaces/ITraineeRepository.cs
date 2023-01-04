@@ -9,7 +9,7 @@ namespace backend.Services.Interfaces
         bool CheckUsernameExist(string username);
         TraineeDto? GetByLoginInfo(LoginDto loginDto);
         TraineeDto? GetById(int traineeId);
-        IQueryable<TraineeDto> GetAll();
+        ICollection<TraineeDto> GetAll();
         TraineeDto? GetByUsername(string username);
         TraineeDto Create(NewTraineeDto newTraineeDto);
         void AddRefreshToken(int traineeId, int TokenId);

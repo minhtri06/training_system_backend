@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using backend.Dto.AdminUser;
+using backend.Dto.Course;
 using backend.Dto.Token;
 using backend.Dto.Trainee;
 using backend.Models;
@@ -11,9 +12,9 @@ namespace backend.Services.Repositories
     {
         public static readonly int SALT_LENGTH = 32;
 
-        public class ConvertToDto
+        public class DtoConversion
         {
-            public static TraineeDto Trainee(Trainee trainee)
+            public static TraineeDto ConvertTrainee(Trainee trainee)
             {
                 return new TraineeDto()
                 {
@@ -29,8 +30,22 @@ namespace backend.Services.Repositories
                     RefreshTokenId = trainee.RefreshTokenId
                 };
             }
+            public static CourseDto ConvertCourse(Course course)
+            {
+                return new CourseDto()
+                {
+                    Id = course.Id, 
+                    Name = course.Name, 
+                    Online = course.Online,
+                    Duration = course.Duration,
+                    LearningObjective = course.LearningObjective,
+                    ImgLink = course.ImgLink,
+                    Description = course.Description,
+                    TrainerId = course.TrainerId
+                };
+            }
 
-            public static RefreshTokenDto RefreshToken(
+            public static RefreshTokenDto ConvertRefreshToken(
                 RefreshToken refreshToken
             )
             {
@@ -43,7 +58,7 @@ namespace backend.Services.Repositories
                 };
             }
 
-            public static AdminUserDto AdminUser(AdminUser adminUser)
+            public static AdminUserDto ConvertAdminUser(AdminUser adminUser)
             {
                 return new AdminUserDto()
                 {

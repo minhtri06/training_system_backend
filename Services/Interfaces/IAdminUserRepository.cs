@@ -8,7 +8,7 @@ namespace backend.Services.Interfaces
         bool CheckUsernameExist(string username);
         AdminUserDto? GetById(int adminUserId);
         AdminUserDto? GetByLoginInfo(LoginDto loginDto);
-        IQueryable<AdminUserDto> GetAll();
+        ICollection<AdminUserDto> GetAll();
         AdminUserDto Create(NewAdminUserDto newAdminUserDto);
         AdminUserDto? DeleteById(int adminUserId);
         AdminUserDto? Update(UpdateAdminUserDto updateAdminUserDto);
