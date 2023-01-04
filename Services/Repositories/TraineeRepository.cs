@@ -31,7 +31,7 @@ namespace backend.Services.Repositories
                 return null;
             }
 
-            var checkedPasswordHash = Utils.HashPassword(
+            var checkedPasswordHash = Utils.Security.HashPassword(
                 loginDto.Password,
                 trainee.PasswordSalt
             );
@@ -41,7 +41,7 @@ namespace backend.Services.Repositories
                 return null;
             }
 
-            return Utils.ConvertTraineeToDto(trainee);
+            return Utils.ConvertToDto.Trainee(trainee);
         }
 
         public TraineeDto Create(NewTraineeDto newTraineeDto)
@@ -53,8 +53,11 @@ namespace backend.Services.Repositories
                 d => d.Id == newTraineeDto.DepartmentId
             );
 
-            var salt = Utils.GenerateSalt(Utils.SALT_LENGTH);
-            var passwordHash = Utils.HashPassword(newTraineeDto.Password, salt);
+            var salt = Utils.Security.GenerateSalt(Utils.SALT_LENGTH);
+            var passwordHash = Utils.Security.HashPassword(
+                newTraineeDto.Password,
+                salt
+            );
 
             var newTrainee = new Trainee()
             {
@@ -73,7 +76,7 @@ namespace backend.Services.Repositories
             _context.Trainees.Add(newTrainee);
             _context.SaveChanges();
 
-            return Utils.ConvertTraineeToDto(newTrainee);
+            return Utils.ConvertToDto.Trainee(newTrainee);
         }
 
         public TraineeDto? GetById(int traineeId)
@@ -82,14 +85,14 @@ namespace backend.Services.Repositories
                 t => t.Id == traineeId
             );
 
-            return trainee != null ? Utils.ConvertTraineeToDto(trainee) : null;
+            return trainee != null ? Utils.ConvertToDto.Trainee(trainee) : null;
         }
 
         public IQueryable<TraineeDto> GetAll()
         {
             var traineeDtos =
                 from trainee in _context.Trainees
-                select Utils.ConvertTraineeToDto(trainee);
+                select Utils.ConvertToDto.Trainee(trainee);
 
             return traineeDtos;
         }
@@ -100,7 +103,7 @@ namespace backend.Services.Repositories
                 t => t.Username == username
             );
 
-            return trainee != null ? Utils.ConvertTraineeToDto(trainee) : null;
+            return trainee != null ? Utils.ConvertToDto.Trainee(trainee) : null;
         }
 
         public void AddRefreshToken(int traineeId, int TokenId)

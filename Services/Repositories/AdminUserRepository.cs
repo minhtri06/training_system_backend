@@ -26,7 +26,7 @@ namespace backend.Services.Repositories
             );
 
             return adminUser != null
-                ? Utils.ConvertAdminUserToDto(adminUser)
+                ? Utils.ConvertToDto.AdminUser(adminUser)
                 : null;
         }
 
@@ -41,7 +41,7 @@ namespace backend.Services.Repositories
                 return null;
             }
 
-            var checkedPasswordHash = Utils.HashPassword(
+            var checkedPasswordHash = Utils.Security.HashPassword(
                 loginDto.Password,
                 adminUser.PasswordSalt
             );
@@ -51,22 +51,22 @@ namespace backend.Services.Repositories
                 return null;
             }
 
-            return Utils.ConvertAdminUserToDto(adminUser);
+            return Utils.ConvertToDto.AdminUser(adminUser);
         }
 
         public IQueryable<AdminUserDto> GetAll()
         {
             var adminUserDtos =
                 from adminUser in _context.AdminUsers
-                select Utils.ConvertAdminUserToDto(adminUser);
+                select Utils.ConvertToDto.AdminUser(adminUser);
 
             return adminUserDtos;
         }
 
         public AdminUserDto Create(NewAdminUserDto newAdminUserDto)
         {
-            var salt = Utils.GenerateSalt(Utils.SALT_LENGTH);
-            var passwordHash = Utils.HashPassword(
+            var salt = Utils.Security.GenerateSalt(Utils.SALT_LENGTH);
+            var passwordHash = Utils.Security.HashPassword(
                 newAdminUserDto.Password,
                 salt
             );
@@ -85,7 +85,7 @@ namespace backend.Services.Repositories
             _context.AdminUsers.Add(newAdminUser);
             _context.SaveChanges();
 
-            return Utils.ConvertAdminUserToDto(newAdminUser);
+            return Utils.ConvertToDto.AdminUser(newAdminUser);
         }
 
         public AdminUserDto? DeleteById(int adminUserId)
@@ -111,7 +111,7 @@ namespace backend.Services.Repositories
             _context.AdminUsers.Remove(adminUser);
             _context.SaveChanges();
 
-            return Utils.ConvertAdminUserToDto(adminUser);
+            return Utils.ConvertToDto.AdminUser(adminUser);
         }
 
         public AdminUserDto? Update(UpdateAdminUserDto updateAdminUserDto)
@@ -132,7 +132,7 @@ namespace backend.Services.Repositories
             _context.AdminUsers.Update(adminUser);
             _context.SaveChanges();
 
-            return Utils.ConvertAdminUserToDto(adminUser);
+            return Utils.ConvertToDto.AdminUser(adminUser);
         }
 
         public void AddRefreshToken(int adminUserId, int TokenId)
