@@ -104,6 +104,8 @@ namespace backend.Controllers
             );
         }
 
+        [HttpPut("{adminUserId}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult UpdateAdminUser(int adminUserId, UpdateAdminUserDto updateAdminUserDto)
         {
             try 
