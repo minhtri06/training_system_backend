@@ -41,7 +41,7 @@ namespace backend.Services.Repositories
                 return null;
             }
 
-            return Utils.ConvertToDto.Trainee(trainee);
+            return Utils.DtoConversion.ConvertTrainee(trainee);
         }
 
         public TraineeDto Create(NewTraineeDto newTraineeDto)
@@ -76,7 +76,7 @@ namespace backend.Services.Repositories
             _context.Trainees.Add(newTrainee);
             _context.SaveChanges();
 
-            return Utils.ConvertToDto.Trainee(newTrainee);
+            return Utils.DtoConversion.ConvertTrainee(newTrainee);
         }
 
         public TraineeDto? GetById(int traineeId)
@@ -85,16 +85,14 @@ namespace backend.Services.Repositories
                 t => t.Id == traineeId
             );
 
-            return trainee != null ? Utils.ConvertToDto.Trainee(trainee) : null;
+            return trainee != null ? Utils.DtoConversion.ConvertTrainee(trainee) : null;
         }
 
-        public IQueryable<TraineeDto> GetAll()
+        public ICollection<TraineeDto> GetAll()
         {
-            var traineeDtos =
-                from trainee in _context.Trainees
-                select Utils.ConvertToDto.Trainee(trainee);
-
-            return traineeDtos;
+            return _context.Trainees
+                .Select(t => Utils.DtoConversion.ConvertTrainee(t))
+                .ToList();
         }
 
         public TraineeDto? GetByUsername(string username)
@@ -103,7 +101,7 @@ namespace backend.Services.Repositories
                 t => t.Username == username
             );
 
-            return trainee != null ? Utils.ConvertToDto.Trainee(trainee) : null;
+            return trainee != null ? Utils.DtoConversion.ConvertTrainee(trainee) : null;
         }
 
         public void AddRefreshToken(int traineeId, int TokenId)

@@ -82,7 +82,7 @@ namespace backend.Services.Repositories
             );
 
             return refreshToken != null
-                ? Utils.ConvertToDto.RefreshToken(refreshToken)
+                ? Utils.DtoConversion.ConvertRefreshToken(refreshToken)
                 : null;
         }
 
@@ -98,7 +98,7 @@ namespace backend.Services.Repositories
             _context.RefreshTokens.Add(newRefreshToken);
             _context.SaveChanges();
 
-            return Utils.ConvertToDto.RefreshToken(newRefreshToken);
+            return Utils.DtoConversion.ConvertRefreshToken(newRefreshToken);
         }
 
         public void RenewRefreshToken(int tokenId, string token)

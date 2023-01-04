@@ -127,7 +127,7 @@ namespace backend.Controllers
 
             public static ApiResponseDto GetAllObjectsSuccessfully(
                 string objectName,
-                IQueryable<Object> objectDtos
+                Object objectDtos
             )
             {
                 return new ApiResponseDto()

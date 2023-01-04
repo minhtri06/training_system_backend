@@ -24,12 +24,7 @@ namespace backend.Controllers
         {
             var courses = _courseRepo.GetAll();
             return Ok(
-                new ApiResponseDto()
-                {
-                    Success = true,
-                    Message = "Get all courses successfully",
-                    Data = courses
-                }
+                Utils.CommonResponse.GetAllObjectsSuccessfully("courses", courses)
             );
         }
 
@@ -42,21 +37,12 @@ namespace backend.Controllers
             if (course == null)
             {
                 return NotFound(
-                    new ApiResponseDto()
-                    {
-                        Success = false,
-                        Message = "Course not found, get course failed"
-                    }
+                    Utils.CommonResponse.ObjectNotFound("course")
                 );
             }
 
             return Ok(
-                new ApiResponseDto()
-                {
-                    Success = true,
-                    Message = "Get course successfully",
-                    Data = new List<CourseDto>() { course }
-                }
+                Utils.CommonResponse.GetObjectSuccessfully("course", course)
             );
         }
 
@@ -85,11 +71,7 @@ namespace backend.Controllers
             if (result == -1)
             {
                 return NotFound(
-                    new ApiResponseDto()
-                    {
-                        Success = false,
-                        Message = "Course not found, delete course failed",
-                    }
+                    Utils.CommonResponse.ObjectNotFound("course")
                 );
             }
 
@@ -110,11 +92,7 @@ namespace backend.Controllers
             if (_courseRepo.Update(courseId, updateCourseDto) == -1)
             {
                 return NotFound(
-                    new ApiResponseDto()
-                    {
-                        Success = false,
-                        Message = "Course not found, update course failed"
-                    }
+                    Utils.CommonResponse.ObjectNotFound("course")
                 );
             }
 

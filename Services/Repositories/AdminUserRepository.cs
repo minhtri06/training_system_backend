@@ -26,7 +26,7 @@ namespace backend.Services.Repositories
             );
 
             return adminUser != null
-                ? Utils.ConvertToDto.AdminUser(adminUser)
+                ? Utils.DtoConversion.ConvertAdminUser(adminUser)
                 : null;
         }
 
@@ -51,16 +51,14 @@ namespace backend.Services.Repositories
                 return null;
             }
 
-            return Utils.ConvertToDto.AdminUser(adminUser);
+            return Utils.DtoConversion.ConvertAdminUser(adminUser);
         }
 
-        public IQueryable<AdminUserDto> GetAll()
+        public ICollection<AdminUserDto> GetAll()
         {
-            var adminUserDtos =
-                from adminUser in _context.AdminUsers
-                select Utils.ConvertToDto.AdminUser(adminUser);
-
-            return adminUserDtos;
+            return _context.AdminUsers
+                .Select(au => Utils.DtoConversion.ConvertAdminUser(au))
+                .ToList();
         }
 
         public AdminUserDto Create(NewAdminUserDto newAdminUserDto)
@@ -85,7 +83,7 @@ namespace backend.Services.Repositories
             _context.AdminUsers.Add(newAdminUser);
             _context.SaveChanges();
 
-            return Utils.ConvertToDto.AdminUser(newAdminUser);
+            return Utils.DtoConversion.ConvertAdminUser(newAdminUser);
         }
 
         public AdminUserDto? DeleteById(int adminUserId)
@@ -111,7 +109,7 @@ namespace backend.Services.Repositories
             _context.AdminUsers.Remove(adminUser);
             _context.SaveChanges();
 
-            return Utils.ConvertToDto.AdminUser(adminUser);
+            return Utils.DtoConversion.ConvertAdminUser(adminUser);
         }
 
         public AdminUserDto? Update(UpdateAdminUserDto updateAdminUserDto)
@@ -132,7 +130,7 @@ namespace backend.Services.Repositories
             _context.AdminUsers.Update(adminUser);
             _context.SaveChanges();
 
-            return Utils.ConvertToDto.AdminUser(adminUser);
+            return Utils.DtoConversion.ConvertAdminUser(adminUser);
         }
 
         public void AddRefreshToken(int adminUserId, int TokenId)
