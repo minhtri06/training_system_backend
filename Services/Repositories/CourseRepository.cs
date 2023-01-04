@@ -52,41 +52,52 @@ namespace backend.Services.Repositories
             return Utils.DtoConversion.ConvertCourse(newCourse);
         }
 
-        public int DeleteById(int courseId)
+        public CourseDto? DeleteById(int courseId)
         {
             var course = _context.Courses.SingleOrDefault(r => r.Id == courseId);
 
             if (course == null)
-                return -1;
+            { 
+                return null;
+            }
 
             _context.Courses.Remove(course);
             _context.SaveChanges();
 
-            return courseId;
+            return Utils.DtoConversion.ConvertCourse(course);
         }
 
-        public int Update(int courseId, UpdateCourseDto updateCourseDto)
+        public CourseDto? Update(int courseId, UpdateCourseDto updateCourseDto)
         {
             var course = _context.Courses.SingleOrDefault(r => r.Id == courseId);
 
             if (course == null)
             {
-                return -1;
+                return null;
             }
 
-            course.Name = updateCourseDto.Name;
+            Trainer? trainer = null;
+            if (updateCourseDto.TrainerId != null)
+            {
+                trainer = _context.Trainers.SingleOrDefault(t => t.Id == updateCourseDto.TrainerId);
+                if (trainer == null)
+                {
+                    throw new Exception("TrainerId not found!!!");
+                }
+            }
+
             course.Name = updateCourseDto.Name;
             course.Online = updateCourseDto.Online;
             course.Duration = updateCourseDto.Duration;
             course.LearningObjective = updateCourseDto.LearningObjective;
             course.ImgLink = updateCourseDto.ImgLink;
             course.Description = updateCourseDto.Description;
-            course.TrainerId = updateCourseDto.TrainerId;
+            course.Trainer = trainer;
 
             _context.Courses.Update(course);
             _context.SaveChanges();
 
-            return courseId;
+            return Utils.DtoConversion.ConvertCourse(course);
         }
     }
 }

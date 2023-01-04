@@ -53,12 +53,7 @@ namespace backend.Controllers
             var newCourse = _courseRepo.Create(newCourseDto);
 
             return Ok(
-                new ApiResponseDto()
-                {
-                    Success = true,
-                    Message = "Create course successfully",
-                    Data = new List<CourseDto>() { newCourse }
-                }
+                Utils.CommonResponse.CreateObjectSuccessfully("course", newCourse)
             );
         }
 
@@ -66,9 +61,9 @@ namespace backend.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteCourseById(int courseId)
         {
-            var result = _courseRepo.DeleteById(courseId);
+            var course = _courseRepo.DeleteById(courseId);
 
-            if (result == -1)
+            if (course == null)
             {
                 return NotFound(
                     Utils.CommonResponse.ObjectNotFound("course")
@@ -76,12 +71,7 @@ namespace backend.Controllers
             }
 
             return Ok(
-                new ApiResponseDto()
-                {
-                    Success = true,
-                    Message = "Delete course successfully",
-                    Data = new { courseId }
-                }
+                Utils.CommonResponse.DeleteObjectSuccessfully("course", course)
             );
         }
 
@@ -89,20 +79,28 @@ namespace backend.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult UpdateCourse(int courseId, UpdateCourseDto updateCourseDto)
         {
-            if (_courseRepo.Update(courseId, updateCourseDto) == -1)
+            try 
             {
-                return NotFound(
-                    Utils.CommonResponse.ObjectNotFound("course")
+                var course = _courseRepo.Update(courseId, updateCourseDto);
+
+                if (course == null)
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound("course")
+                    );
+                }
+
+                return Ok(
+                    Utils.CommonResponse.UpdateObjectSuccessfully("course", course)
                 );
             }
-
-            return Ok(
-                new ApiResponseDto()
-                {
-                    Success = true,
-                    Message = "Update successfully",
-                }
-            );
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.ResponseException(ex.Message)
+                );
+            }
         }
     }
 }

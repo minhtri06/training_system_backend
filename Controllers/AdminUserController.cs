@@ -104,6 +104,32 @@ namespace backend.Controllers
             );
         }
 
+        public IActionResult UpdateAdminUser(int adminUserId, UpdateAdminUserDto updateAdminUserDto)
+        {
+            try 
+            {
+                var adminUser = _adminUserRepo.Update(adminUserId, updateAdminUserDto);
+
+                if (adminUser == null)
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound("adminUser")
+                    );
+                }
+
+                return Ok(
+                    Utils.CommonResponse.UpdateObjectSuccessfully("adminUser", adminUser)
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.ResponseException(ex.Message)
+                );
+            }
+        }
+
         // Each time the user login, the fresh token of that user will
         // be created or renewed
         [HttpPost("login")]
