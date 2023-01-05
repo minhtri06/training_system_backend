@@ -106,6 +106,51 @@ namespace backend.Services.Repositories
             }
         }
 
+        public class EntityMapping
+        {
+            public static void MapTraineeFromDto(
+                ref Trainee trainee,
+                UpdateTraineeDto updateTraineeDto,
+                AppDbContext context
+            )
+            {
+                Role? role = null;
+                if (updateTraineeDto.RoleId != null)
+                {
+                    role = context.Roles.SingleOrDefault(
+                        r => r.Id == updateTraineeDto.RoleId
+                    );
+                    if (role == null)
+                    {
+                        throw new Exception(
+                            "Role id not found!!, cannot update trainee"
+                        );
+                    }
+                }
+
+                Department? department = null;
+                if (updateTraineeDto.DepartmentId != null)
+                {
+                    department = context.Departments.SingleOrDefault(
+                        d => d.Id == updateTraineeDto.DepartmentId
+                    );
+                    if (department == null)
+                    {
+                        throw new Exception(
+                            "Department id not found!!, cannot update trainee"
+                        );
+                    }
+                }
+
+                trainee.FirstName = updateTraineeDto.FirstName;
+                trainee.LastName = updateTraineeDto.LastName;
+                trainee.Level = updateTraineeDto.Level;
+                trainee.ImgLink = updateTraineeDto.ImgLink;
+                trainee.Role = role;
+                trainee.Department = department;
+            }
+        }
+
         public class Security
         {
             public static string GenerateSalt(int length)

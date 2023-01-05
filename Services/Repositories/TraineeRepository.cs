@@ -108,6 +108,31 @@ namespace backend.Services.Repositories
                 : null;
         }
 
+        public TraineeDto? Update(
+            int traineeId,
+            UpdateTraineeDto updateTraineeDto
+        )
+        {
+            var trainee = _context.Trainees.SingleOrDefault(
+                t => t.Id == traineeId
+            );
+            if (trainee == null)
+            {
+                return null;
+            }
+
+            Utils.EntityMapping.MapTraineeFromDto(
+                ref trainee,
+                updateTraineeDto,
+                _context
+            );
+
+            _context.Trainees.Update(trainee);
+            _context.SaveChanges();
+
+            return Utils.DtoConversion.ConvertTrainee(trainee);
+        }
+
         public void AddRefreshToken(int traineeId, int TokenId)
         {
             var trainee = _context.Trainees.Single(t => t.Id == traineeId);
