@@ -22,7 +22,7 @@ namespace backend.Services.Repositories
 
         public ClassDto? GetById(int classId)
         {
-            var class_ = _context.Courses.SingleOrDefault(c => c.Id == classId);
+            var class_ = _context.Classes.SingleOrDefault(c => c.Id == classId);
 
             if (class_ != null)
             {
@@ -33,9 +33,17 @@ namespace backend.Services.Repositories
 
         public ClassDto Create(NewClassDto newClassDto)
         {
-            var course = _context.Courses.SingleOrDefault(
-                c => c.Id == newClassDto.CourseId
-            );
+            Course? course = null;
+            if (newClassDto.CourseId != null)
+            {
+                course = _context.Courses.SingleOrDefault(
+                    c => c.Id == newClassDto.CourseId
+                );
+                if (course == null)
+                {
+                    throw new Exception("CourseId not found!!!");
+                }
+            }
 
             var newClass = new Class()
             {

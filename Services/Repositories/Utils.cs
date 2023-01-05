@@ -99,11 +99,6 @@ namespace backend.Services.Repositories
                     RefreshTokenId = adminUser.RefreshTokenId
                 };
             }
-
-            internal static ClassDto? ConvertClass(Course @class)
-            {
-                throw new NotImplementedException();
-            }
         }
 
         public class EntityMapping

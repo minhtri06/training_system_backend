@@ -39,12 +39,31 @@ namespace backend.Services.Repositories
             NewCourseCertificateDto newCourseCertificateDto
         )
         {
-            var trainee = _context.Trainees.SingleOrDefault(
+            Trainee? trainee = null;
+            trainee = _context.Trainees.SingleOrDefault(
                 t => t.Id == newCourseCertificateDto.TraineeId
             );
-            var course = _context.Courses.SingleOrDefault(
-                c => c.Id == newCourseCertificateDto.CourseId
+            if (trainee == null)
+            {
+                throw new Exception("TraineeId not found!!");
+            }
+
+            Course? course = null;
+            course = _context.Courses.SingleOrDefault(
+                t => t.Id == newCourseCertificateDto.CourseId
             );
+            if (course == null)
+            {
+                throw new Exception("CourseId not found!!!");
+            }
+
+            var courseCertificate = _context.CourseCertificates.SingleOrDefault(
+                cc => cc.TraineeId == trainee.Id && cc.CourseId == course.Id
+            );
+            if (courseCertificate != null)
+            {
+                throw new Exception("TraineeId and CourseId are existed!!!");
+            }
 
             var newCourseCertificate = new CourseCertificate()
             {
