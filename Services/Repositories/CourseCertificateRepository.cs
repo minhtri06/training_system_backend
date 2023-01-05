@@ -4,7 +4,7 @@ using backend.Services.Interfaces;
 
 namespace backend.Services.Repositories
 {
-    public class    CourseCertificateRepository: ICourseCertificateRepository
+    public class CourseCertificateRepository : ICourseCertificateRepository
     {
         private readonly AppDbContext _context;
 
@@ -22,22 +22,32 @@ namespace backend.Services.Repositories
 
         public CourseCertificateDto? GetById(int traineeId, int courseId)
         {
-            var courseCertificate = _context.CourseCertificates.SingleOrDefault(cc => cc.TraineeId == traineeId && cc.CourseId == courseId);
+            var courseCertificate = _context.CourseCertificates.SingleOrDefault(
+                cc => cc.TraineeId == traineeId && cc.CourseId == courseId
+            );
 
             if (courseCertificate != null)
             {
-                return Utils.DtoConversion.ConvertCourseCertificate(courseCertificate);
+                return Utils.DtoConversion.ConvertCourseCertificate(
+                    courseCertificate
+                );
             }
             return null;
         }
 
-        public CourseCertificateDto Create(NewCourseCertificateDto newCourseCertificateDto)
+        public CourseCertificateDto Create(
+            NewCourseCertificateDto newCourseCertificateDto
+        )
         {
-            var trainee = _context.Trainees.SingleOrDefault(t => t.Id == newCourseCertificateDto.TraineeId);
-            var course = _context.Courses.SingleOrDefault(c => c.Id == newCourseCertificateDto.CourseId);
+            var trainee = _context.Trainees.SingleOrDefault(
+                t => t.Id == newCourseCertificateDto.TraineeId
+            );
+            var course = _context.Courses.SingleOrDefault(
+                c => c.Id == newCourseCertificateDto.CourseId
+            );
 
-            var newCourseCertificate = new CourseCertificate() 
-            { 
+            var newCourseCertificate = new CourseCertificate()
+            {
                 Trainee = trainee,
                 Course = course,
                 StartDate = newCourseCertificateDto.StartDate,
@@ -47,27 +57,39 @@ namespace backend.Services.Repositories
             _context.CourseCertificates.Add(newCourseCertificate);
             _context.SaveChanges();
 
-            return Utils.DtoConversion.ConvertCourseCertificate(newCourseCertificate);
+            return Utils.DtoConversion.ConvertCourseCertificate(
+                newCourseCertificate
+            );
         }
 
         public CourseCertificateDto? DeleteById(int traineeId, int courseId)
         {
-            var courseCertificate = _context.CourseCertificates.SingleOrDefault(cc => cc.TraineeId == traineeId && cc.CourseId == courseId);
+            var courseCertificate = _context.CourseCertificates.SingleOrDefault(
+                cc => cc.TraineeId == traineeId && cc.CourseId == courseId
+            );
 
             if (courseCertificate == null)
-            { 
+            {
                 return null;
             }
 
             _context.CourseCertificates.Remove(courseCertificate);
             _context.SaveChanges();
 
-            return Utils.DtoConversion.ConvertCourseCertificate(courseCertificate);
+            return Utils.DtoConversion.ConvertCourseCertificate(
+                courseCertificate
+            );
         }
 
-        public CourseCertificateDto? Update(int traineeId, int courseId, UpdateCourseCertificateDto updateCourseCertificateDto)
+        public CourseCertificateDto? Update(
+            int traineeId,
+            int courseId,
+            UpdateCourseCertificateDto updateCourseCertificateDto
+        )
         {
-            var courseCertificate = _context.CourseCertificates.SingleOrDefault(cc => cc.TraineeId == traineeId && cc.CourseId == courseId);
+            var courseCertificate = _context.CourseCertificates.SingleOrDefault(
+                cc => cc.TraineeId == traineeId && cc.CourseId == courseId
+            );
 
             if (courseCertificate == null)
             {
@@ -80,7 +102,9 @@ namespace backend.Services.Repositories
             _context.CourseCertificates.Update(courseCertificate);
             _context.SaveChanges();
 
-            return Utils.DtoConversion.ConvertCourseCertificate(courseCertificate);
+            return Utils.DtoConversion.ConvertCourseCertificate(
+                courseCertificate
+            );
         }
     }
 }

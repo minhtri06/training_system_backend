@@ -85,7 +85,9 @@ namespace backend.Services.Repositories
                 t => t.Id == traineeId
             );
 
-            return trainee != null ? Utils.DtoConversion.ConvertTrainee(trainee) : null;
+            return trainee != null
+                ? Utils.DtoConversion.ConvertTrainee(trainee)
+                : null;
         }
 
         public ICollection<TraineeDto> GetAll()
@@ -101,7 +103,9 @@ namespace backend.Services.Repositories
                 t => t.Username == username
             );
 
-            return trainee != null ? Utils.DtoConversion.ConvertTrainee(trainee) : null;
+            return trainee != null
+                ? Utils.DtoConversion.ConvertTrainee(trainee)
+                : null;
         }
 
         public void AddRefreshToken(int traineeId, int TokenId)

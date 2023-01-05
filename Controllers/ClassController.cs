@@ -24,7 +24,10 @@ namespace backend.Controllers
         {
             var classes = _classRepo.GetAll();
             return Ok(
-                Utils.CommonResponse.GetAllObjectsSuccessfully("classes", classes)
+                Utils.CommonResponse.GetAllObjectsSuccessfully(
+                    "classes",
+                    classes
+                )
             );
         }
 
@@ -32,17 +35,15 @@ namespace backend.Controllers
         [Authorize]
         public IActionResult GetClassById(int classId)
         {
-            var _class = _classRepo.GetById(classId);
+            var class_ = _classRepo.GetById(classId);
 
-            if (_class == null)
+            if (class_ == null)
             {
-                return NotFound(
-                    Utils.CommonResponse.ObjectNotFound("class")
-                );
+                return NotFound(Utils.CommonResponse.ObjectNotFound("class"));
             }
 
             return Ok(
-                Utils.CommonResponse.GetObjectSuccessfully("class", _class)
+                Utils.CommonResponse.GetObjectSuccessfully("class", class_)
             );
         }
 
@@ -61,29 +62,30 @@ namespace backend.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteClassById(int classId)
         {
-            var _class = _classRepo.DeleteById(classId);
+            var class_ = _classRepo.DeleteById(classId);
 
-            if (_class == null)
+            if (class_ == null)
             {
-                return NotFound(
-                    Utils.CommonResponse.ObjectNotFound("class")
-                );
+                return NotFound(Utils.CommonResponse.ObjectNotFound("class"));
             }
 
             return Ok(
-                Utils.CommonResponse.DeleteObjectSuccessfully("class", _class)
+                Utils.CommonResponse.DeleteObjectSuccessfully("class", class_)
             );
         }
 
         [HttpPut("{classId}")]
         [Authorize(Roles = "Admin")]
-        public IActionResult UpdateClass(int classId, UpdateClassDto updateClassDto)
+        public IActionResult UpdateClass(
+            int classId,
+            UpdateClassDto updateClassDto
+        )
         {
-            try 
+            try
             {
-                var _class = _classRepo.Update(classId, updateClassDto);
+                var class_ = _classRepo.Update(classId, updateClassDto);
 
-                if (_class == null)
+                if (class_ == null)
                 {
                     return NotFound(
                         Utils.CommonResponse.ObjectNotFound("class")
@@ -91,7 +93,10 @@ namespace backend.Controllers
                 }
 
                 return Ok(
-                    Utils.CommonResponse.UpdateObjectSuccessfully("class", _class)
+                    Utils.CommonResponse.UpdateObjectSuccessfully(
+                        "class",
+                        class_
+                    )
                 );
             }
             catch (Exception ex)

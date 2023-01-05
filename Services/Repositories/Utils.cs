@@ -49,8 +49,8 @@ namespace backend.Services.Repositories
             {
                 return new CourseDto()
                 {
-                    Id = course.Id, 
-                    Name = course.Name, 
+                    Id = course.Id,
+                    Name = course.Name,
                     Online = course.Online,
                     Duration = course.Duration,
                     LearningObjective = course.LearningObjective,
@@ -60,7 +60,9 @@ namespace backend.Services.Repositories
                 };
             }
 
-            public static CourseCertificateDto ConvertCourseCertificate(CourseCertificate courseCertificate)
+            public static CourseCertificateDto ConvertCourseCertificate(
+                CourseCertificate courseCertificate
+            )
             {
                 return new CourseCertificateDto()
                 {
@@ -70,6 +72,7 @@ namespace backend.Services.Repositories
                     Duration = courseCertificate.Duration
                 };
             }
+
             public static RefreshTokenDto ConvertRefreshToken(
                 RefreshToken refreshToken
             )

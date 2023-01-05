@@ -11,7 +11,10 @@ namespace backend.Services.Interfaces
         ICollection<AdminUserDto> GetAll();
         AdminUserDto Create(NewAdminUserDto newAdminUserDto);
         AdminUserDto? DeleteById(int adminUserId);
-        AdminUserDto? Update(int adminUserId, UpdateAdminUserDto updateAdminUserDto);
+        AdminUserDto? Update(
+            int adminUserId,
+            UpdateAdminUserDto updateAdminUserDto
+        );
         void AddRefreshToken(int traineeId, int TokenId);
     }
 }

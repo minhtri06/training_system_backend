@@ -1,7 +1,7 @@
 namespace backend.Dto.Class
 {
     public class UpdateClassDto
-    {        
+    {
         public string Name { get; set; } = null!;
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

@@ -106,11 +106,17 @@ namespace backend.Controllers
 
         [HttpPut("{adminUserId}")]
         [Authorize(Roles = "Admin")]
-        public IActionResult UpdateAdminUser(int adminUserId, UpdateAdminUserDto updateAdminUserDto)
+        public IActionResult UpdateAdminUser(
+            int adminUserId,
+            UpdateAdminUserDto updateAdminUserDto
+        )
         {
-            try 
+            try
             {
-                var adminUser = _adminUserRepo.Update(adminUserId, updateAdminUserDto);
+                var adminUser = _adminUserRepo.Update(
+                    adminUserId,
+                    updateAdminUserDto
+                );
 
                 if (adminUser == null)
                 {
@@ -120,7 +126,10 @@ namespace backend.Controllers
                 }
 
                 return Ok(
-                    Utils.CommonResponse.UpdateObjectSuccessfully("adminUser", adminUser)
+                    Utils.CommonResponse.UpdateObjectSuccessfully(
+                        "adminUser",
+                        adminUser
+                    )
                 );
             }
             catch (Exception ex)

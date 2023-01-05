@@ -6,8 +6,14 @@ namespace backend.Services.Interfaces
     {
         ICollection<CourseCertificateDto> GetAll();
         CourseCertificateDto? GetById(int traineeId, int courseId);
-        CourseCertificateDto Create(NewCourseCertificateDto newCourseCertificateDto);
+        CourseCertificateDto Create(
+            NewCourseCertificateDto newCourseCertificateDto
+        );
         CourseCertificateDto? DeleteById(int traineeId, int courseId);
-        CourseCertificateDto? Update(int traineeId, int courseId, UpdateCourseCertificateDto updateCourseCertificateDto);
+        CourseCertificateDto? Update(
+            int traineeId,
+            int courseId,
+            UpdateCourseCertificateDto updateCourseCertificateDto
+        );
     }
 }

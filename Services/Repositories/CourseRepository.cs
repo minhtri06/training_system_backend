@@ -4,7 +4,7 @@ using backend.Services.Interfaces;
 
 namespace backend.Services.Repositories
 {
-    public class CourseRepository: ICourseRepository
+    public class CourseRepository : ICourseRepository
     {
         private readonly AppDbContext _context;
 
@@ -22,7 +22,9 @@ namespace backend.Services.Repositories
 
         public CourseDto? GetById(int courseId)
         {
-            var course = _context.Courses.SingleOrDefault(c => c.Id == courseId);
+            var course = _context.Courses.SingleOrDefault(
+                c => c.Id == courseId
+            );
 
             if (course != null)
             {
@@ -33,11 +35,13 @@ namespace backend.Services.Repositories
 
         public CourseDto Create(NewCourseDto newCourseDto)
         {
-            var trainer = _context.Trainers.SingleOrDefault(t => t.Id == newCourseDto.TrainerId);
-            
-            var newCourse = new Course() 
-            { 
-                Name = newCourseDto.Name, 
+            var trainer = _context.Trainers.SingleOrDefault(
+                t => t.Id == newCourseDto.TrainerId
+            );
+
+            var newCourse = new Course()
+            {
+                Name = newCourseDto.Name,
                 Online = newCourseDto.Online,
                 Duration = newCourseDto.Duration,
                 LearningObjective = newCourseDto.LearningObjective,
@@ -54,10 +58,12 @@ namespace backend.Services.Repositories
 
         public CourseDto? DeleteById(int courseId)
         {
-            var course = _context.Courses.SingleOrDefault(c => c.Id == courseId);
+            var course = _context.Courses.SingleOrDefault(
+                c => c.Id == courseId
+            );
 
             if (course == null)
-            { 
+            {
                 return null;
             }
 
@@ -69,7 +75,9 @@ namespace backend.Services.Repositories
 
         public CourseDto? Update(int courseId, UpdateCourseDto updateCourseDto)
         {
-            var course = _context.Courses.SingleOrDefault(c => c.Id == courseId);
+            var course = _context.Courses.SingleOrDefault(
+                c => c.Id == courseId
+            );
 
             if (course == null)
             {
@@ -79,7 +87,9 @@ namespace backend.Services.Repositories
             Trainer? trainer = null;
             if (updateCourseDto.TrainerId != null)
             {
-                trainer = _context.Trainers.SingleOrDefault(t => t.Id == updateCourseDto.TrainerId);
+                trainer = _context.Trainers.SingleOrDefault(
+                    t => t.Id == updateCourseDto.TrainerId
+                );
                 if (trainer == null)
                 {
                     throw new Exception("TrainerId not found!!!");
