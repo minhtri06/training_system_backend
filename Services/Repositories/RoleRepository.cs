@@ -13,6 +13,11 @@ namespace backend.Services.Repositories
             _context = context;
         }
 
+        public bool CheckIdExist(int roleId)
+        {
+            return _context.Roles.Any(r => r.Id == roleId);
+        }
+
         public ICollection<RoleDto> GetAll()
         {
             return _context.Roles
