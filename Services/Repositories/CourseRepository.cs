@@ -54,7 +54,7 @@ namespace backend.Services.Repositories
 
         public CourseDto? DeleteById(int courseId)
         {
-            var course = _context.Courses.SingleOrDefault(r => r.Id == courseId);
+            var course = _context.Courses.SingleOrDefault(c => c.Id == courseId);
 
             if (course == null)
             { 
@@ -69,7 +69,7 @@ namespace backend.Services.Repositories
 
         public CourseDto? Update(int courseId, UpdateCourseDto updateCourseDto)
         {
-            var course = _context.Courses.SingleOrDefault(r => r.Id == courseId);
+            var course = _context.Courses.SingleOrDefault(c => c.Id == courseId);
 
             if (course == null)
             {
