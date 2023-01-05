@@ -6,6 +6,7 @@ using backend.Dto.Course;
 using backend.Dto.CourseCertificate;
 using backend.Dto.LearningPath;
 using backend.Dto.Department;
+using backend.Dto.DepartmentLearningPath;
 using backend.Dto.Token;
 using backend.Dto.Trainee;
 using backend.Models;
@@ -95,6 +96,17 @@ namespace backend.Services.Repositories
                 {
                     Id = department.Id,
                     Name = department.Name
+                };
+            }
+
+            public static DepartmentLearningPathDto ConvertDepartmentLearningPath(
+                DepartmentLearningPath department
+            )
+            {
+                return new DepartmentLearningPathDto()
+                {
+                    DepartmentId = department.DepartmentId,
+                    LearningPathId = department.LearningPathId
                 };
             }
 

@@ -168,6 +168,15 @@ namespace backend.Controllers
                     Message = exception,
                 };
             }
+
+            public static ApiResponseDto ObjectAlreadyExist(string objectName)
+            {
+                return new ApiResponseDto()
+                {
+                    Success = false,
+                    Message = objectName + " already exist",
+                };
+            }
         }
     }
 }
