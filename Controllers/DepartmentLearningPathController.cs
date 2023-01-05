@@ -12,12 +12,18 @@ namespace backend.Controllers
     public class DepartmentLearningPathController : Controller
     {
         private readonly IDepartmentLearningPathRepository _departmentLearningPathRepo;
+        private readonly IDepartmentRepository _departmentRepo;
+        private readonly ILearningPathRepository _learningPathRepo;
 
         public DepartmentLearningPathController(
-            IDepartmentLearningPathRepository departmentLearningPathRepo
+            IDepartmentLearningPathRepository departmentLearningPathRepo,
+            IDepartmentRepository departmentRepo,
+            ILearningPathRepository learningPathRepo
         )
         {
             _departmentLearningPathRepo = departmentLearningPathRepo;
+            _departmentRepo = departmentRepo;
+            _learningPathRepo = learningPathRepo;
         }
 
         [HttpGet]
@@ -97,6 +103,42 @@ namespace backend.Controllers
         {
             try
             {
+                if (
+                    _departmentRepo.CheckIdExist(
+                        newDepartmentLearningPathDto.DepartmentId
+                    ) == false
+                )
+                {
+                    return BadRequest(
+                        Utils.CommonResponse.ObjectNotFound("department")
+                    );
+                }
+
+                if (
+                    _learningPathRepo.CheckIdExist(
+                        newDepartmentLearningPathDto.LearningPathId
+                    ) == false
+                )
+                {
+                    return BadRequest(
+                        Utils.CommonResponse.ObjectNotFound("learningPath")
+                    );
+                }
+
+                if (
+                    _departmentLearningPathRepo.CheckIdExist(
+                        newDepartmentLearningPathDto.DepartmentId,
+                        newDepartmentLearningPathDto.LearningPathId
+                    )
+                )
+                {
+                    return BadRequest(
+                        Utils.CommonResponse.ObjectAlreadyExist(
+                            "departmennt learningpath"
+                        )
+                    );
+                }
+
                 var newDepartmentLearningPath =
                     _departmentLearningPathRepo.Create(
                         newDepartmentLearningPathDto
@@ -140,6 +182,7 @@ namespace backend.Controllers
                         )
                     );
                 }
+
                 var departmentLearningPath =
                     _departmentLearningPathRepo.DeleteById(
                         departmentId,
