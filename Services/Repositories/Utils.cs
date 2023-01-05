@@ -4,6 +4,7 @@ using backend.Dto.AdminUser;
 using backend.Dto.Class;
 using backend.Dto.Course;
 using backend.Dto.CourseCertificate;
+using backend.Dto.LearningPath;
 using backend.Dto.Department;
 using backend.Dto.DepartmentLearningPath;
 using backend.Dto.Token;
@@ -59,6 +60,20 @@ namespace backend.Services.Repositories
                     ImgLink = course.ImgLink,
                     Description = course.Description,
                     TrainerId = course.TrainerId
+                };
+            }
+
+            public static LearningPathDto ConvertLearningPath(
+                LearningPath learningPath
+            )
+            {
+                return new LearningPathDto()
+                {
+                    Id = learningPath.Id,
+                    Name = learningPath.Name,
+                    Description = learningPath.Description,
+                    ImgLink = learningPath.ImgLink,
+                    ForRoleId = learningPath.ForRoleId
                 };
             }
 
@@ -165,6 +180,17 @@ namespace backend.Services.Repositories
                 trainee.ImgLink = updateTraineeDto.ImgLink;
                 trainee.Role = role;
                 trainee.Department = department;
+            }
+
+            public static void MapLearningPathFromDto(
+                ref LearningPath learningPath,
+                UpdateLearningPathDto updateLearningPathDto
+            )
+            {
+                learningPath.Name = updateLearningPathDto.Name;
+                learningPath.Description = updateLearningPathDto.Description;
+                learningPath.ImgLink = updateLearningPathDto.ImgLink;
+                learningPath.ForRoleId = updateLearningPathDto.ForRoleId;
             }
         }
 
