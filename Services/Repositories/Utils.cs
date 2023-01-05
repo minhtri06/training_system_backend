@@ -1,7 +1,9 @@
 using System.Security.Cryptography;
 using System.Text;
 using backend.Dto.AdminUser;
+using backend.Dto.Class;
 using backend.Dto.Course;
+using backend.Dto.CourseCertificate;
 using backend.Dto.Token;
 using backend.Dto.Trainee;
 using backend.Models;
@@ -30,18 +32,44 @@ namespace backend.Services.Repositories
                     RefreshTokenId = trainee.RefreshTokenId
                 };
             }
+
+            public static ClassDto ConvertClass(Class _class)
+            {
+                return new ClassDto()
+                {
+                    Id = _class.Id,
+                    Name = _class.Name,
+                    StartDate = _class.StartDate,
+                    EndDate = _class.EndDate,
+                    CourseId = _class.CourseId
+                };
+            }
+
             public static CourseDto ConvertCourse(Course course)
             {
                 return new CourseDto()
                 {
-                    Id = course.Id, 
-                    Name = course.Name, 
+                    Id = course.Id,
+                    Name = course.Name,
                     Online = course.Online,
                     Duration = course.Duration,
                     LearningObjective = course.LearningObjective,
                     ImgLink = course.ImgLink,
                     Description = course.Description,
                     TrainerId = course.TrainerId
+                };
+            }
+
+            public static CourseCertificateDto ConvertCourseCertificate(
+                CourseCertificate courseCertificate
+            )
+            {
+                return new CourseCertificateDto()
+                {
+                    TraineeId = courseCertificate.TraineeId,
+                    CourseId = courseCertificate.CourseId,
+                    StartDate = courseCertificate.StartDate,
+                    Duration = courseCertificate.Duration
                 };
             }
 
@@ -70,6 +98,11 @@ namespace backend.Services.Repositories
                     SystemRole = adminUser.SystemRole,
                     RefreshTokenId = adminUser.RefreshTokenId
                 };
+            }
+
+            internal static ClassDto? ConvertClass(Course @class)
+            {
+                throw new NotImplementedException();
             }
         }
 

@@ -7,7 +7,7 @@ namespace backend.Services.Interfaces
         ICollection<CourseDto> GetAll();
         CourseDto? GetById(int courseId);
         CourseDto Create(NewCourseDto newCourseDto);
-        int DeleteById(int courseId);
-        int Update(int courseId, UpdateCourseDto updateCourseDto);
+        CourseDto? DeleteById(int courseId);
+        CourseDto? Update(int courseId, UpdateCourseDto updateCourseDto);
     }
 }

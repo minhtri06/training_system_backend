@@ -125,6 +125,19 @@ namespace backend.Controllers
                 };
             }
 
+            public static ApiResponseDto UpdateObjectSuccessfully(
+                string objectName,
+                Object objectDto
+            )
+            {
+                return new ApiResponseDto()
+                {
+                    Success = true,
+                    Message = "update " + objectName + " successfully",
+                    Data = new List<Object>() { objectDto }
+                };
+            }
+
             public static ApiResponseDto GetAllObjectsSuccessfully(
                 string objectName,
                 Object objectDtos

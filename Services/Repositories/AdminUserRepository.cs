@@ -112,10 +112,13 @@ namespace backend.Services.Repositories
             return Utils.DtoConversion.ConvertAdminUser(adminUser);
         }
 
-        public AdminUserDto? Update(UpdateAdminUserDto updateAdminUserDto)
+        public AdminUserDto? Update(
+            int adminUserId,
+            UpdateAdminUserDto updateAdminUserDto
+        )
         {
             var adminUser = _context.AdminUsers.SingleOrDefault(
-                au => au.Id == updateAdminUserDto.Id
+                au => au.Id == adminUserId
             );
 
             if (adminUser == null)
