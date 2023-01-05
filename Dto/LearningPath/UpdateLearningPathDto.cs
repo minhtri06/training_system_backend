@@ -1,6 +1,6 @@
 namespace backend.Dto.LearningPath
 {
-    public class NewLearningPathDto
+    public class UpdateLearningPathDto
     {
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;

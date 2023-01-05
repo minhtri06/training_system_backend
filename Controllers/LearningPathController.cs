@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 using backend.Services.Interfaces;
+using backend.Dto.LearningPath;
 
 namespace backend.Controllers
 {
@@ -14,5 +16,25 @@ namespace backend.Controllers
         {
             _learningPathRepo = learningPathRepo;
         }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult GetAllLearningPath()
+        {
+            var learningPaths = _learningPathRepo.GetAll();
+
+            return Ok(
+                Utils.CommonResponse.GetAllObjectsSuccessfully(
+                    "learning paths",
+                    learningPaths
+                )
+            );
+        }
+
+        // [HttpPost]
+        // [Authorize(Roles = "Admin")]
+        // public IActionResult CreateLearningPath(
+        //     NewLearningPathDto newLearningPathDto
+        // ) { }
     }
 }
