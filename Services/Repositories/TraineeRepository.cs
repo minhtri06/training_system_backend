@@ -15,6 +15,11 @@ namespace backend.Services.Repositories
             _context = context;
         }
 
+        public bool CheckIdExist(int traineeId)
+        {
+            return _context.Trainees.Any(t => t.Id == traineeId);
+        }
+
         public bool CheckUsernameExist(string username)
         {
             return _context.Trainees.Any(t => t.Username == username);
@@ -106,6 +111,52 @@ namespace backend.Services.Repositories
             return trainee != null
                 ? Utils.DtoConversion.ConvertTrainee(trainee)
                 : null;
+        }
+
+        public TraineeDto? Update(
+            int traineeId,
+            UpdateTraineeDto updateTraineeDto
+        )
+        {
+            var trainee = _context.Trainees.SingleOrDefault(
+                t => t.Id == traineeId
+            );
+            if (trainee == null)
+            {
+                return null;
+            }
+
+            Utils.EntityMapping.MapTraineeFromDto(
+                ref trainee,
+                updateTraineeDto,
+                _context
+            );
+
+            _context.Trainees.Update(trainee);
+            _context.SaveChanges();
+
+            return Utils.DtoConversion.ConvertTrainee(trainee);
+        }
+
+        public TraineeDto DeleteById(int traineeId)
+        {
+            var deletedTrainee = _context.Trainees.Single(
+                t => t.Id == traineeId
+            );
+
+            if (deletedTrainee.RefreshTokenId != null)
+            {
+                var refreshToken = _context.RefreshTokens.Single(
+                    rt => rt.Id == deletedTrainee.RefreshTokenId
+                );
+                _context.Remove(refreshToken);
+                _context.SaveChanges();
+            }
+
+            _context.Trainees.Remove(deletedTrainee);
+            _context.SaveChanges();
+
+            return Utils.DtoConversion.ConvertTrainee(deletedTrainee);
         }
 
         public void AddRefreshToken(int traineeId, int TokenId)
