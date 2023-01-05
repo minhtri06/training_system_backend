@@ -107,6 +107,43 @@ namespace backend.Controllers
             );
         }
 
+        [HttpPut("{traineeId}")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult UpdateTraine(
+            int traineeId,
+            UpdateTraineeDto updateTraineeDto
+        )
+        {
+            try
+            {
+                var updatedTrainee = _traineeRepo.Update(
+                    traineeId,
+                    updateTraineeDto
+                );
+
+                if (updatedTrainee == null)
+                {
+                    return BadRequest(
+                        Utils.CommonResponse.UpdateObjectFailed("trainee")
+                    );
+                }
+
+                return Ok(
+                    Utils.CommonResponse.UpdateObjectSuccessfully(
+                        "trainee",
+                        updatedTrainee
+                    )
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.ResponseException(ex.Message)
+                );
+            }
+        }
+
         [HttpPost("login")]
         public IActionResult Login(LoginDto loginDto)
         {

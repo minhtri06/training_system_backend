@@ -138,6 +138,15 @@ namespace backend.Controllers
                 };
             }
 
+            public static ApiResponseDto UpdateObjectFailed(string objectName)
+            {
+                return new ApiResponseDto()
+                {
+                    Success = true,
+                    Message = "update " + objectName + " failed",
+                };
+            }
+
             public static ApiResponseDto GetAllObjectsSuccessfully(
                 string objectName,
                 Object objectDtos
