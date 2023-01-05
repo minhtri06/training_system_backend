@@ -4,7 +4,7 @@ using backend.Services.Interfaces;
 
 namespace backend.Services.Repositories
 {
-    public class ClassRepository: IClassRepository
+    public class ClassRepository : IClassRepository
     {
         private readonly AppDbContext _context;
 
@@ -22,11 +22,11 @@ namespace backend.Services.Repositories
 
         public ClassDto? GetById(int classId)
         {
-            var _class = _context.Courses.SingleOrDefault(c => c.Id == classId);
+            var class_ = _context.Courses.SingleOrDefault(c => c.Id == classId);
 
-            if (_class != null)
+            if (class_ != null)
             {
-                return Utils.DtoConversion.ConvertClass(_class);
+                return Utils.DtoConversion.ConvertClass(class_);
             }
             return null;
         }
@@ -34,10 +34,10 @@ namespace backend.Services.Repositories
         public ClassDto Create(NewClassDto newClassDto)
         {
             var course = _context.Courses.SingleOrDefault(c => c.Id == newClassDto.CourseId);
-            
-            var newClass = new Class() 
-            { 
-                Name = newClassDto.Name, 
+
+            var newClass = new Class()
+            {
+                Name = newClassDto.Name,
                 StartDate = newClassDto.StartDate,
                 EndDate = newClassDto.EndDate,
                 Course = course
@@ -51,24 +51,24 @@ namespace backend.Services.Repositories
 
         public ClassDto? DeleteById(int classId)
         {
-            var _class = _context.Classes.SingleOrDefault(c => c.Id == classId);
+            var class_ = _context.Classes.SingleOrDefault(c => c.Id == classId);
 
-            if (_class == null)
-            { 
+            if (class_ == null)
+            {
                 return null;
             }
 
-            _context.Classes.Remove(_class);
+            _context.Classes.Remove(class_);
             _context.SaveChanges();
 
-            return Utils.DtoConversion.ConvertClass(_class);
+            return Utils.DtoConversion.ConvertClass(class_);
         }
 
         public ClassDto? Update(int classId, UpdateClassDto updateClassDto)
         {
-            var _class = _context.Classes.SingleOrDefault(c => c.Id == classId);
+            var class_ = _context.Classes.SingleOrDefault(c => c.Id == classId);
 
-            if (_class == null)
+            if (class_ == null)
             {
                 return null;
             }
@@ -83,15 +83,15 @@ namespace backend.Services.Repositories
                 }
             }
 
-            _class.Name = updateClassDto.Name;
-            _class.StartDate = updateClassDto.StartDate;
-            _class.EndDate = updateClassDto.EndDate;
-            _class.Course = course;
+            class_.Name = updateClassDto.Name;
+            class_.StartDate = updateClassDto.StartDate;
+            class_.EndDate = updateClassDto.EndDate;
+            class_.Course = course;
 
-            _context.Classes.Update(_class);
+            _context.Classes.Update(class_);
             _context.SaveChanges();
 
-            return Utils.DtoConversion.ConvertClass(_class);
+            return Utils.DtoConversion.ConvertClass(class_);
         }
     }
 }
