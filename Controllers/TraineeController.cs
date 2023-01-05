@@ -144,6 +144,25 @@ namespace backend.Controllers
             }
         }
 
+        [HttpDelete("{traineeId}")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult DeleteTrainee(int traineeId)
+        {
+            if (_traineeRepo.CheckIdExist(traineeId) == false)
+            {
+                return NotFound(Utils.CommonResponse.ObjectNotFound("trainee"));
+            }
+
+            var deletedTrainee = _traineeRepo.DeleteById(traineeId);
+
+            return Ok(
+                Utils.CommonResponse.DeleteObjectSuccessfully(
+                    "trainee",
+                    deletedTrainee
+                )
+            );
+        }
+
         [HttpPost("login")]
         public IActionResult Login(LoginDto loginDto)
         {

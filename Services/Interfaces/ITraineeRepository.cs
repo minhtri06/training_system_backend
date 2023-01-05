@@ -6,6 +6,7 @@ namespace backend.Services.Interfaces
 {
     public interface ITraineeRepository
     {
+        bool CheckIdExist(int traineeId);
         bool CheckUsernameExist(string username);
         ICollection<TraineeDto> GetAll();
         TraineeDto? GetByLoginInfo(LoginDto loginDto);
@@ -13,6 +14,7 @@ namespace backend.Services.Interfaces
         TraineeDto? GetByUsername(string username);
         TraineeDto Create(NewTraineeDto newTraineeDto);
         TraineeDto? Update(int traineeId, UpdateTraineeDto updateTraineeDto);
+        TraineeDto DeleteById(int traineeId);
         void AddRefreshToken(int traineeId, int TokenId);
     }
 }
