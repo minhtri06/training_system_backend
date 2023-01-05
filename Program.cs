@@ -32,6 +32,7 @@ builder.Services.AddScoped<
     ICourseCertificateRepository,
     CourseCertificateRepository
 >();
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<ILearningPathRepository, LearningPathRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();

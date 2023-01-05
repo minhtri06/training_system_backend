@@ -5,6 +5,7 @@ using backend.Dto.Class;
 using backend.Dto.Course;
 using backend.Dto.CourseCertificate;
 using backend.Dto.LearningPath;
+using backend.Dto.Department;
 using backend.Dto.Token;
 using backend.Dto.Trainee;
 using backend.Models;
@@ -85,6 +86,15 @@ namespace backend.Services.Repositories
                     CourseId = courseCertificate.CourseId,
                     StartDate = courseCertificate.StartDate,
                     Duration = courseCertificate.Duration
+                };
+            }
+
+            public static DepartmentDto ConvertDepartment(Department department)
+            {
+                return new DepartmentDto()
+                {
+                    Id = department.Id,
+                    Name = department.Name
                 };
             }
 
