@@ -22,56 +22,106 @@ namespace backend.Controllers
         [Authorize]
         public IActionResult GetAllClasses()
         {
-            var classes = _classRepo.GetAll();
-            return Ok(
-                Utils.CommonResponse.GetAllObjectsSuccessfully(
-                    "classes",
-                    classes
-                )
-            );
+            try
+            {
+                var classes = _classRepo.GetAll();
+                return Ok(
+                    Utils.CommonResponse.GetAllObjectsSuccessfully(
+                        "classes",
+                        classes
+                    )
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.ResponseException(ex.Message)
+                );
+            }
         }
 
         [HttpGet("{classId}")]
         [Authorize]
         public IActionResult GetClassById(int classId)
         {
-            var class_ = _classRepo.GetById(classId);
-
-            if (class_ == null)
+            try
             {
-                return NotFound(Utils.CommonResponse.ObjectNotFound("class"));
-            }
+                var class_ = _classRepo.GetById(classId);
 
-            return Ok(
-                Utils.CommonResponse.GetObjectSuccessfully("class", class_)
-            );
+                if (class_ == null)
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound("class")
+                    );
+                }
+
+                return Ok(
+                    Utils.CommonResponse.GetObjectSuccessfully("class", class_)
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.ResponseException(ex.Message)
+                );
+            }
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public IActionResult CreateClass(NewClassDto newClassDto)
         {
-            var newClass = _classRepo.Create(newClassDto);
+            try
+            {
+                var newClass = _classRepo.Create(newClassDto);
 
-            return Ok(
-                Utils.CommonResponse.CreateObjectSuccessfully("class", newClass)
-            );
+                return Ok(
+                    Utils.CommonResponse.CreateObjectSuccessfully(
+                        "class",
+                        newClass
+                    )
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.ResponseException(ex.Message)
+                );
+            }
         }
 
         [HttpDelete("{classId}")]
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteClassById(int classId)
         {
-            var class_ = _classRepo.DeleteById(classId);
-
-            if (class_ == null)
+            try
             {
-                return NotFound(Utils.CommonResponse.ObjectNotFound("class"));
-            }
+                var class_ = _classRepo.DeleteById(classId);
 
-            return Ok(
-                Utils.CommonResponse.DeleteObjectSuccessfully("class", class_)
-            );
+                if (class_ == null)
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound("class")
+                    );
+                }
+
+                return Ok(
+                    Utils.CommonResponse.DeleteObjectSuccessfully(
+                        "class",
+                        class_
+                    )
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.ResponseException(ex.Message)
+                );
+            }
         }
 
         [HttpPut("{classId}")]

@@ -35,9 +35,17 @@ namespace backend.Services.Repositories
 
         public CourseDto Create(NewCourseDto newCourseDto)
         {
-            var trainer = _context.Trainers.SingleOrDefault(
-                t => t.Id == newCourseDto.TrainerId
-            );
+            Trainer? trainer = null;
+            if (newCourseDto.TrainerId != null)
+            {
+                trainer = _context.Trainers.SingleOrDefault(
+                    t => t.Id == newCourseDto.TrainerId
+                );
+                if (trainer == null)
+                {
+                    throw new Exception("TrainerId not found!!!");
+                }
+            }
 
             var newCourse = new Course()
             {

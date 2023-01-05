@@ -24,13 +24,23 @@ namespace backend.Controllers
         [Authorize]
         public IActionResult GetAllCourseCertificates()
         {
-            var courseCertificates = _courseCertificateRepo.GetAll();
-            return Ok(
-                Utils.CommonResponse.GetAllObjectsSuccessfully(
-                    "courseCertificates",
-                    courseCertificates
-                )
-            );
+            try
+            {
+                var courseCertificates = _courseCertificateRepo.GetAll();
+                return Ok(
+                    Utils.CommonResponse.GetAllObjectsSuccessfully(
+                        "courseCertificates",
+                        courseCertificates
+                    )
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.ResponseException(ex.Message)
+                );
+            }
         }
 
         [HttpGet("{traineeId}/{courseId}")]
@@ -40,24 +50,34 @@ namespace backend.Controllers
             int courseId
         )
         {
-            var courseCertificate = _courseCertificateRepo.GetById(
-                traineeId,
-                courseId
-            );
-
-            if (courseCertificate == null)
+            try
             {
-                return NotFound(
-                    Utils.CommonResponse.ObjectNotFound("courseCertificate")
+                var courseCertificate = _courseCertificateRepo.GetById(
+                    traineeId,
+                    courseId
+                );
+
+                if (courseCertificate == null)
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound("courseCertificate")
+                    );
+                }
+
+                return Ok(
+                    Utils.CommonResponse.GetObjectSuccessfully(
+                        "courseCertificate",
+                        courseCertificate
+                    )
                 );
             }
-
-            return Ok(
-                Utils.CommonResponse.GetObjectSuccessfully(
-                    "courseCertificate",
-                    courseCertificate
-                )
-            );
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.ResponseException(ex.Message)
+                );
+            }
         }
 
         [HttpPost]
@@ -66,16 +86,26 @@ namespace backend.Controllers
             NewCourseCertificateDto newCourseCertificateDto
         )
         {
-            var newCourseCertificate = _courseCertificateRepo.Create(
-                newCourseCertificateDto
-            );
+            try
+            {
+                var newCourseCertificate = _courseCertificateRepo.Create(
+                    newCourseCertificateDto
+                );
 
-            return Ok(
-                Utils.CommonResponse.CreateObjectSuccessfully(
-                    "courseCertificate",
-                    newCourseCertificate
-                )
-            );
+                return Ok(
+                    Utils.CommonResponse.CreateObjectSuccessfully(
+                        "courseCertificate",
+                        newCourseCertificate
+                    )
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.ResponseException(ex.Message)
+                );
+            }
         }
 
         [HttpDelete("{traineeId}/{courseId}")]
@@ -85,24 +115,34 @@ namespace backend.Controllers
             int courseId
         )
         {
-            var courseCertificate = _courseCertificateRepo.DeleteById(
-                traineeId,
-                courseId
-            );
-
-            if (courseCertificate == null)
+            try
             {
-                return NotFound(
-                    Utils.CommonResponse.ObjectNotFound("courseCertificate")
+                var courseCertificate = _courseCertificateRepo.DeleteById(
+                    traineeId,
+                    courseId
+                );
+
+                if (courseCertificate == null)
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound("courseCertificate")
+                    );
+                }
+
+                return Ok(
+                    Utils.CommonResponse.DeleteObjectSuccessfully(
+                        "courseCertificate",
+                        courseCertificate
+                    )
                 );
             }
-
-            return Ok(
-                Utils.CommonResponse.DeleteObjectSuccessfully(
-                    "courseCertificate",
-                    courseCertificate
-                )
-            );
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.ResponseException(ex.Message)
+                );
+            }
         }
 
         [HttpPut("{traineeId}/{courseId}")]
