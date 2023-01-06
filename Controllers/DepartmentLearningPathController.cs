@@ -109,7 +109,7 @@ namespace backend.Controllers
                     ) == false
                 )
                 {
-                    return BadRequest(
+                    return NotFound(
                         Utils.CommonResponse.ObjectNotFound("department")
                     );
                 }
@@ -120,7 +120,7 @@ namespace backend.Controllers
                     ) == false
                 )
                 {
-                    return BadRequest(
+                    return NotFound(
                         Utils.CommonResponse.ObjectNotFound("learningPath")
                     );
                 }
