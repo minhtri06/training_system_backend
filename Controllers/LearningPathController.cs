@@ -109,7 +109,7 @@ namespace backend.Controllers
             );
         }
 
-        [HttpDelete("{learningPathId}")]
+        [HttpPut("{learningPathId}")]
         [Authorize(Roles = "Admin")]
         public IActionResult UpdateLearningPath(
             int learningPathId,
