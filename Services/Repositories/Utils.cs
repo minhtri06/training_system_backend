@@ -11,6 +11,7 @@ using backend.Dto.Token;
 using backend.Dto.Trainee;
 using backend.Models;
 using backend.Dto.LearningPathCertificate;
+using backend.Dto.LearningPathCourse;
 
 namespace backend.Services.Repositories
 {
@@ -150,6 +151,16 @@ namespace backend.Services.Repositories
                     RefreshTokenId = adminUser.RefreshTokenId
                 };
             }
+
+            public static LearningPathCourseDto ConvertLearningPathCourse(LearningPathCourse learningPathCourse)
+            {
+                return new LearningPathCourseDto()
+                {
+                    CourseId = learningPathCourse.CourseId,
+                    LearningPathId = learningPathCourse.LearningPathId,
+                    CourseOrder = learningPathCourse.CourseOrder
+                };
+            }
         }
 
         public class EntityMapping
@@ -214,6 +225,14 @@ namespace backend.Services.Repositories
             {
                 learningPathCertificate.StartDate = updateLearningPathCertificateDto.StartDate;
                 learningPathCertificate.Duration = updateLearningPathCertificateDto.Duration;
+            }
+
+            public static void MapLearningPathCourseFromDto(
+               ref LearningPathCourse learningPathCourse,
+               UpdateLearningPathCourseDto updateLearningPathCourseDto
+           )
+            {
+                learningPathCourse.CourseOrder = updateLearningPathCourseDto.CourseOrder;
             }
         }
 

@@ -142,7 +142,7 @@ namespace backend.Controllers
 
             return Ok(
                 Utils.CommonResponse.DeleteObjectSuccessfully(
-                    "learning path",
+                    "learning path certificate",
                     deletedLearningPathCertificate
                 )
             );
@@ -158,7 +158,7 @@ namespace backend.Controllers
             if (_learningPathCertificateRepo.CheckIdExist(traineeId, learningPathId) == false)
             {
                 return NotFound(
-                    Utils.CommonResponse.ObjectNotFound("learning path certificate id")
+                    Utils.CommonResponse.ObjectNotFound("learning path certificate")
                 );
             }
 
