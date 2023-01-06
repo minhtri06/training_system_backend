@@ -13,6 +13,11 @@ namespace backend.Services.Repositories
             _context = context;
         }
 
+        public bool CheckIdExist(int courseId)
+        {
+            return _context.Courses.Any(d => d.Id == courseId);
+        }
+
         public ICollection<CourseDto> GetAll()
         {
             return _context.Courses

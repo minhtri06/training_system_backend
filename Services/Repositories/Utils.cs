@@ -10,6 +10,8 @@ using backend.Dto.DepartmentLearningPath;
 using backend.Dto.Token;
 using backend.Dto.Trainee;
 using backend.Models;
+using backend.Dto.LearningPathCertificate;
+using backend.Dto.LearningPathCourse;
 
 namespace backend.Services.Repositories
 {
@@ -100,13 +102,26 @@ namespace backend.Services.Repositories
             }
 
             public static DepartmentLearningPathDto ConvertDepartmentLearningPath(
-                DepartmentLearningPath department
+                DepartmentLearningPath departmentLearningPath
             )
             {
                 return new DepartmentLearningPathDto()
                 {
-                    DepartmentId = department.DepartmentId,
-                    LearningPathId = department.LearningPathId
+                    DepartmentId = departmentLearningPath.DepartmentId,
+                    LearningPathId = departmentLearningPath.LearningPathId
+                };
+            }
+
+            public static LearningPathCertificateDto ConvertLearningPathCertificate(
+                            LearningPathCertificate learningPathCertificate
+                        )
+            {
+                return new LearningPathCertificateDto()
+                {
+                    TraineeId = learningPathCertificate.TraineeId,
+                    LearningPathId = learningPathCertificate.LearningPathId,
+                    StartDate = learningPathCertificate.StartDate,
+                    Duration = learningPathCertificate.Duration
                 };
             }
 
@@ -134,6 +149,16 @@ namespace backend.Services.Repositories
                     ImgLink = adminUser.ImgLink,
                     SystemRole = adminUser.SystemRole,
                     RefreshTokenId = adminUser.RefreshTokenId
+                };
+            }
+
+            public static LearningPathCourseDto ConvertLearningPathCourse(LearningPathCourse learningPathCourse)
+            {
+                return new LearningPathCourseDto()
+                {
+                    CourseId = learningPathCourse.CourseId,
+                    LearningPathId = learningPathCourse.LearningPathId,
+                    CourseOrder = learningPathCourse.CourseOrder
                 };
             }
         }
@@ -191,6 +216,23 @@ namespace backend.Services.Repositories
                 learningPath.Description = updateLearningPathDto.Description;
                 learningPath.ImgLink = updateLearningPathDto.ImgLink;
                 learningPath.ForRoleId = updateLearningPathDto.ForRoleId;
+            }
+
+            public static void MapLearningPathCertificateFromDto(
+                ref LearningPathCertificate learningPathCertificate,
+                UpdateLearningPathCertificateDto updateLearningPathCertificateDto
+            )
+            {
+                learningPathCertificate.StartDate = updateLearningPathCertificateDto.StartDate;
+                learningPathCertificate.Duration = updateLearningPathCertificateDto.Duration;
+            }
+
+            public static void MapLearningPathCourseFromDto(
+               ref LearningPathCourse learningPathCourse,
+               UpdateLearningPathCourseDto updateLearningPathCourseDto
+           )
+            {
+                learningPathCourse.CourseOrder = updateLearningPathCourseDto.CourseOrder;
             }
         }
 
