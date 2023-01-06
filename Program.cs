@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 var jwtSecretKeyBytes = Encoding.UTF8.GetBytes(
     builder.Configuration["AppSettings:SecretKey"]
 );
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 // Add services to the container.
 
@@ -43,6 +44,20 @@ builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<ITraineeRepository, TraineeRepository>();
 builder.Services.AddScoped<ITrainerRepository, TrainerRepository>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy
+                .WithOrigins("http://localhost:3000", "http://127.0.0.1:3000")
+                .WithMethods("PUT", "DELETE", "GET", "POST", "OPTIONS")
+                .AllowAnyHeader();
+        }
+    );
+});
+
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
@@ -70,6 +85,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthentication();
 app.UseAuthorization();
