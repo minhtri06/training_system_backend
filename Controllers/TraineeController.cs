@@ -27,10 +27,9 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        // [Authorize]
+        [Authorize]
         public IActionResult GetAllTrainees()
         {
-            Console.WriteLine(SystemRole.Trainee.ToString());
             var trainees = _traineeRepo.GetAll();
 
             return Ok(
@@ -44,48 +43,46 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        // [Authorize(Roles = "Admin")]
-        public IActionResult CreateTrainee()
+        [Authorize(Roles = "Admin")]
+        public IActionResult CreateTrainee(NewTraineeDto newTraineeDto)
         {
-            var mes = "you call post request";
-            return Ok(new { mes });
-            // if (_traineeRepo.CheckUsernameExist(newTraineeDto.Username))
-            // {
-            //     return BadRequest(Utils.CommonResponse.USERNAME_ALREADY_EXISTS);
-            // }
+            if (_traineeRepo.CheckUsernameExist(newTraineeDto.Username))
+            {
+                return BadRequest(Utils.CommonResponse.USERNAME_ALREADY_EXISTS);
+            }
 
-            // if (newTraineeDto.Username.Length < 3)
-            // {
-            //     return BadRequest(
-            //         new ApiResponseDto()
-            //         {
-            //             Success = false,
-            //             Message = "Username must longer than 2 characters"
-            //         }
-            //     );
-            // }
+            if (newTraineeDto.Username.Length < 3)
+            {
+                return BadRequest(
+                    new ApiResponseDto()
+                    {
+                        Success = false,
+                        Message = "Username must longer than 2 characters"
+                    }
+                );
+            }
 
-            // if (newTraineeDto.Password.Length < 3)
-            // {
-            //     return BadRequest(
-            //         new ApiResponseDto()
-            //         {
-            //             Success = false,
-            //             Message = "Password must longer than 2 characters"
-            //         }
-            //     );
-            // }
+            if (newTraineeDto.Password.Length < 3)
+            {
+                return BadRequest(
+                    new ApiResponseDto()
+                    {
+                        Success = false,
+                        Message = "Password must longer than 2 characters"
+                    }
+                );
+            }
 
-            // var newTrainee = _traineeRepo.Create(newTraineeDto);
+            var newTrainee = _traineeRepo.Create(newTraineeDto);
 
-            // return Ok(
-            //     new ApiResponseDto()
-            //     {
-            //         Success = true,
-            //         Message = "Trainee created successfully",
-            //         Data = newTrainee
-            //     }
-            // );
+            return Ok(
+                new ApiResponseDto()
+                {
+                    Success = true,
+                    Message = "Trainee created successfully",
+                    Data = newTrainee
+                }
+            );
         }
 
         [HttpGet("{traineeId}")]

@@ -254,6 +254,16 @@ namespace backend.Services.Repositories
                 learningPathCourse.CourseOrder =
                     updateLearningPathCourseDto.CourseOrder;
             }
+
+            public static void MapTrainerFromUpdateDto(
+                ref Trainer trainer,
+                UpdateTrainerDto updateTrainerDto
+            )
+            {
+                trainer.FirstName = updateTrainerDto.FirstName;
+                trainer.LastName = updateTrainerDto.LastName;
+                trainer.ImgLink = updateTrainerDto.ImgLink;
+            }
         }
 
         public class Security
