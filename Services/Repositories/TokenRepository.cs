@@ -16,7 +16,7 @@ namespace backend.Services.Repositories
         private readonly string _secretKey;
         private readonly int _refreshTokenLength = 32;
         private readonly int _refreshTokenDurationDays = 90;
-        private readonly int _accessTokenDurationMinutes = 10;
+        private readonly int _accessTokenDurationMinutes = 100000;
 
         public TokenRepository(
             AppDbContext context,
