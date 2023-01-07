@@ -202,7 +202,7 @@ namespace backend.Models
                 e.HasKey("Id");
                 e.Property(t => t.SystemRole).IsRequired().HasMaxLength(50);
                 e.Property(t => t.Username).IsRequired().HasMaxLength(250);
-                e.Property(t => t.passwordHash).IsRequired().HasMaxLength(250);
+                e.Property(t => t.PasswordHash).IsRequired().HasMaxLength(250);
                 e.Property(t => t.PasswordSalt).IsRequired().HasMaxLength(250);
                 e.HasIndex(t => t.Username).IsUnique();
 

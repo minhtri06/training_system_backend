@@ -1,6 +1,8 @@
-namespace backend.Models
+using backend.Models;
+
+namespace backend.Dto.Trainer
 {
-    public class Trainer
+    public class TrainerDto
     {
         public int Id { get; set; }
         public string FirstName { get; set; } = null!;
@@ -8,16 +10,6 @@ namespace backend.Models
         public string ImgLink { get; set; } = null!;
         public SystemRole SystemRole { get; set; }
         public string Username { get; set; } = null!;
-        public string PasswordHash { get; set; } = null!;
-        public string PasswordSalt { get; set; } = null!;
         public int? RefreshTokenId { get; set; }
-
-        public RefreshToken? RefreshToken { get; set; }
-        public ICollection<Course> Courses { get; set; }
-
-        public Trainer()
-        {
-            Courses = new List<Course>();
-        }
     }
 }

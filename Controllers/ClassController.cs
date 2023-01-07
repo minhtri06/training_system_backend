@@ -20,11 +20,22 @@ namespace backend.Controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult GetAllClasses()
+        public IActionResult GetAllClasses(
+            [FromQuery(Name = "courseId")] int? courseId
+        )
         {
             try
             {
-                var classes = _classRepo.GetAll();
+                ICollection<ClassDto> classes;
+
+                if (courseId != null)
+                {
+                    classes = _classRepo.GetAllByCourseId((int)courseId);
+                }
+                else
+                {
+                    classes = _classRepo.GetAll();
+                }
                 return Ok(
                     Utils.CommonResponse.GetAllObjectsSuccessfully(
                         "classes",

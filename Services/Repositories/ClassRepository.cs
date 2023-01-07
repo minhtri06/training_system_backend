@@ -20,6 +20,14 @@ namespace backend.Services.Repositories
                 .ToList();
         }
 
+        public ICollection<ClassDto> GetAllByCourseId(int courseId)
+        {
+            return _context.Classes
+                .Where(c => c.CourseId == courseId)
+                .Select(c => Utils.DtoConversion.ConvertClass(c))
+                .ToList();
+        }
+
         public ClassDto? GetById(int classId)
         {
             var class_ = _context.Classes.SingleOrDefault(c => c.Id == classId);

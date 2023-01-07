@@ -12,6 +12,7 @@ using backend.Dto.Trainee;
 using backend.Models;
 using backend.Dto.LearningPathCertificate;
 using backend.Dto.LearningPathCourse;
+using backend.Dto.Trainer;
 
 namespace backend.Services.Repositories
 {
@@ -35,6 +36,20 @@ namespace backend.Services.Repositories
                     RoleId = trainee.RoleId,
                     DepartmentId = trainee.DepartmentId,
                     RefreshTokenId = trainee.RefreshTokenId
+                };
+            }
+
+            public static TrainerDto ConvertTrainer(Trainer trainer)
+            {
+                return new TrainerDto()
+                {
+                    Id = trainer.Id,
+                    FirstName = trainer.FirstName,
+                    LastName = trainer.LastName,
+                    ImgLink = trainer.ImgLink,
+                    SystemRole = trainer.SystemRole,
+                    Username = trainer.Username,
+                    RefreshTokenId = trainer.RefreshTokenId,
                 };
             }
 
@@ -113,8 +128,8 @@ namespace backend.Services.Repositories
             }
 
             public static LearningPathCertificateDto ConvertLearningPathCertificate(
-                            LearningPathCertificate learningPathCertificate
-                        )
+                LearningPathCertificate learningPathCertificate
+            )
             {
                 return new LearningPathCertificateDto()
                 {
@@ -152,7 +167,9 @@ namespace backend.Services.Repositories
                 };
             }
 
-            public static LearningPathCourseDto ConvertLearningPathCourse(LearningPathCourse learningPathCourse)
+            public static LearningPathCourseDto ConvertLearningPathCourse(
+                LearningPathCourse learningPathCourse
+            )
             {
                 return new LearningPathCourseDto()
                 {
@@ -223,16 +240,19 @@ namespace backend.Services.Repositories
                 UpdateLearningPathCertificateDto updateLearningPathCertificateDto
             )
             {
-                learningPathCertificate.StartDate = updateLearningPathCertificateDto.StartDate;
-                learningPathCertificate.Duration = updateLearningPathCertificateDto.Duration;
+                learningPathCertificate.StartDate =
+                    updateLearningPathCertificateDto.StartDate;
+                learningPathCertificate.Duration =
+                    updateLearningPathCertificateDto.Duration;
             }
 
             public static void MapLearningPathCourseFromDto(
-               ref LearningPathCourse learningPathCourse,
-               UpdateLearningPathCourseDto updateLearningPathCourseDto
-           )
+                ref LearningPathCourse learningPathCourse,
+                UpdateLearningPathCourseDto updateLearningPathCourseDto
+            )
             {
-                learningPathCourse.CourseOrder = updateLearningPathCourseDto.CourseOrder;
+                learningPathCourse.CourseOrder =
+                    updateLearningPathCourseDto.CourseOrder;
             }
         }
 
