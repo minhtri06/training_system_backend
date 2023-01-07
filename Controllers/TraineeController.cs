@@ -201,6 +201,7 @@ namespace backend.Controllers
 
                     return Ok(
                         Utils.CommonResponse.LoginSuccessfully(
+                            trainee,
                             newAccessTokenString,
                             newRefreshTokenString
                         )
@@ -215,6 +216,7 @@ namespace backend.Controllers
 
                 return Ok(
                     Utils.CommonResponse.LoginSuccessfully(
+                        trainee,
                         newAccessTokenString,
                         newRefreshTokenString
                     )

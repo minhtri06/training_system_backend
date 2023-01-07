@@ -180,6 +180,7 @@ namespace backend.Controllers
 
                     return Ok(
                         Utils.CommonResponse.LoginSuccessfully(
+                            adminUser,
                             newAccessTokenString,
                             newRefreshTokenString
                         )
@@ -194,6 +195,7 @@ namespace backend.Controllers
 
                 return Ok(
                     Utils.CommonResponse.LoginSuccessfully(
+                        adminUser,
                         newAccessTokenString,
                         newRefreshTokenString
                     )

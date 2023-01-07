@@ -1,3 +1,4 @@
+using backend.Dto.AdminUser;
 using backend.Dto.ApiResponse;
 using backend.Dto.Token;
 using backend.Services.Interfaces;
@@ -43,6 +44,7 @@ namespace backend.Controllers
                 };
 
             public static ApiResponseDto LoginSuccessfully(
+                Object userInfo,
                 string accessToken,
                 string refreshToken
             )
@@ -55,6 +57,7 @@ namespace backend.Controllers
                     {
                         new TokenResponseDto()
                         {
+                            userInfo = userInfo,
                             AccessToken = accessToken,
                             RefreshToken = refreshToken
                         }
