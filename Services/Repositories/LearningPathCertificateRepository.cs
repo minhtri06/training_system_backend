@@ -3,6 +3,7 @@ using backend.Dto.LearningPathCertificate;
 using backend.Dto.Trainee;
 using backend.Models;
 using backend.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services.Repositories
 {
@@ -54,14 +55,17 @@ namespace backend.Services.Repositories
             return learningPathCertificateDtos;
         }
 
-        public ICollection<TraineeDto> GetAllCertificatedTraineesByLearningPathId(
+        public ICollection<CertificatedTraineeDto> GetAllCertTraineesByLPathId(
             int learningPathId
         )
         {
             return _context.LearningPathCertificates
                 .Where(lpc => lpc.LearningPathId == learningPathId)
-                .Select(lpc => lpc.Trainee)
-                .Select(t => Utils.DtoConversion.ConvertTrainee(t))
+                .Include(lpc => lpc.Trainee)
+                .Select(
+                    lpc =>
+                        Utils.DtoConversion.ConvertLPathCertToCertTrainee(lpc)
+                )
                 .ToList();
         }
 

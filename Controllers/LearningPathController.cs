@@ -139,7 +139,7 @@ namespace backend.Controllers
                 }
 
                 var certificatedTrainees =
-                    _learningPathCertificateRepo.GetAllCertificatedTraineesByLearningPathId(
+                    _learningPathCertificateRepo.GetAllCertTraineesByLPathId(
                         learningPathId
                     );
 

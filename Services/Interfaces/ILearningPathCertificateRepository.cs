@@ -9,7 +9,7 @@ namespace backend.Services.Interfaces
         bool CheckIdExist(int traineeId, int learningPathId);
         LearningPathCertificateDto GetById(int traineeId, int learningPathId);
         ICollection<LearningPathCertificateDto> GetAll();
-        ICollection<TraineeDto> GetAllCertificatedTraineesByLearningPathId(
+        ICollection<CertificatedTraineeDto> GetAllCertTraineesByLPathId(
             int learningPathId
         );
         ICollection<LearningPathDto> GetAllLearningPathsByTraineeId(

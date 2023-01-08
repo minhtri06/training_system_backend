@@ -193,6 +193,22 @@ namespace backend.Services.Repositories
                     CourseId = traineeClass.CourseId
                 };
             }
+
+            public static CertificatedTraineeDto ConvertLPathCertToCertTrainee(
+                LearningPathCertificate lPathCert
+            )
+            {
+                return new CertificatedTraineeDto()
+                {
+                    Id = lPathCert.Trainee.Id,
+                    FirstName = lPathCert.Trainee.FirstName,
+                    LastName = lPathCert.Trainee.LastName,
+                    Level = lPathCert.Trainee.Level,
+                    ImgLink = lPathCert.Trainee.ImgLink,
+                    StartDate = lPathCert.StartDate,
+                    Duration = lPathCert.Duration
+                };
+            }
         }
 
         public class EntityMapping

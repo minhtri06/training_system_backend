@@ -7,7 +7,7 @@ namespace backend.Models
         public DateTime StartDate { get; set; }
         public int Duration { get; set; }
 
-        public Trainee Trainee { get; set; } = null!;
-        public LearningPath LearningPath { get; set; } = null!;
+        public virtual Trainee Trainee { get; set; } = null!;
+        public virtual LearningPath LearningPath { get; set; } = null!;
     }
 }
