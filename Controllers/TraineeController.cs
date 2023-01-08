@@ -16,14 +16,17 @@ namespace backend.Controllers
     {
         private readonly ITraineeRepository _traineeRepo;
         private readonly ITokenRepository _tokenRepo;
+        private readonly ILearningPathCertificateRepository _learningPathCertificateRepo;
 
         public TraineeController(
             ITraineeRepository traineeRepo,
-            ITokenRepository tokenRepo
+            ITokenRepository tokenRepo,
+            ILearningPathCertificateRepository learningPathCertificateRepo
         )
         {
             _traineeRepo = traineeRepo;
             _tokenRepo = tokenRepo;
+            _learningPathCertificateRepo = learningPathCertificateRepo;
         }
 
         [HttpGet]
@@ -127,6 +130,40 @@ namespace backend.Controllers
                         Message = "Get trainee successfully",
                         Data = new List<TraineeDto>() { trainee }
                     }
+                );
+            }
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
+        }
+
+        [HttpGet("{traineeId}/Certificates")]
+        [Authorize]
+        public IActionResult GetAllCertificatesOfATrainee(int traineeId)
+        {
+            try
+            {
+                if (_traineeRepo.CheckIdExist(traineeId) == false)
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound("trainee id")
+                    );
+                }
+
+                var learningPaths =
+                    _learningPathCertificateRepo.GetAllLearningPathsByTraineeId(
+                        traineeId
+                    );
+
+                return Ok(
+                    Utils.CommonResponse.GetAllObjectsSuccessfully(
+                        "certificates of a trainee",
+                        learningPaths
+                    )
                 );
             }
             catch

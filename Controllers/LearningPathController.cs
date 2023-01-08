@@ -12,14 +12,17 @@ namespace backend.Controllers
     {
         private readonly ILearningPathRepository _learningPathRepo;
         private readonly IRoleRepository _roleRepo;
+        private readonly ILearningPathCertificateRepository _learningPathCertificateRepo;
 
         public LearningPathController(
             ILearningPathRepository learningPathRepo,
-            IRoleRepository roleRepo
+            IRoleRepository roleRepo,
+            ILearningPathCertificateRepository learningPathCertificateRepo
         )
         {
             _learningPathRepo = learningPathRepo;
             _roleRepo = roleRepo;
+            _learningPathCertificateRepo = learningPathCertificateRepo;
         }
 
         [HttpGet]
@@ -105,6 +108,42 @@ namespace backend.Controllers
                     Utils.CommonResponse.GetObjectSuccessfully(
                         "learning path",
                         learningPath
+                    )
+                );
+            }
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
+        }
+
+        [HttpGet("{learningPathId}/CertificatedTrainees")]
+        [Authorize]
+        public IActionResult GetCertificatedTraineesOfALearningPath(
+            int learningPathId
+        )
+        {
+            try
+            {
+                if (_learningPathRepo.CheckIdExist(learningPathId) == false)
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound("learning path")
+                    );
+                }
+
+                var certificatedTrainees =
+                    _learningPathCertificateRepo.GetAllCertificatedTraineesByLearningPathId(
+                        learningPathId
+                    );
+
+                return Ok(
+                    Utils.CommonResponse.GetAllObjectsSuccessfully(
+                        "certificated trainees",
+                        certificatedTrainees
                     )
                 );
             }

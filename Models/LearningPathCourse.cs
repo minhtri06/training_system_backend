@@ -6,7 +6,7 @@ namespace backend.Models
         public int CourseId { get; set; }
         public int CourseOrder { get; set; }
 
-        public LearningPath LearningPath { get; set; } = null!;
-        public Course Course { get; set; } = null!;
+        public LearningPath? LearningPath { get; set; }
+        public Course? Course { get; set; }
     }
 }

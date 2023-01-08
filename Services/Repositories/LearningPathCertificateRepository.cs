@@ -1,10 +1,13 @@
+using backend.Dto.LearningPath;
 using backend.Dto.LearningPathCertificate;
+using backend.Dto.Trainee;
 using backend.Models;
 using backend.Services.Interfaces;
 
 namespace backend.Services.Repositories
 {
-    public class LearningPathCertificateRepository : ILearningPathCertificateRepository
+    public class LearningPathCertificateRepository
+        : ILearningPathCertificateRepository
     {
         private readonly AppDbContext _context;
 
@@ -15,28 +18,67 @@ namespace backend.Services.Repositories
 
         public bool CheckIdExist(int traineeId, int learningPathId)
         {
-            return _context.LearningPathCertificates.Any(lpc => lpc.TraineeId == traineeId && lpc.LearningPathId == learningPathId);
+            return _context.LearningPathCertificates.Any(
+                lpc =>
+                    lpc.TraineeId == traineeId
+                    && lpc.LearningPathId == learningPathId
+            );
         }
 
-        public LearningPathCertificateDto GetById(int traineeId, int learningPathId)
+        public LearningPathCertificateDto GetById(
+            int traineeId,
+            int learningPathId
+        )
         {
-            var learningPathCertificate = _context.LearningPathCertificates.Single(
-                lpc => lpc.TraineeId == traineeId && lpc.LearningPathId == learningPathId
-            );
+            var learningPathCertificate =
+                _context.LearningPathCertificates.Single(
+                    lpc =>
+                        lpc.TraineeId == traineeId
+                        && lpc.LearningPathId == learningPathId
+                );
 
-            return Utils.DtoConversion.ConvertLearningPathCertificate(learningPathCertificate);
+            return Utils.DtoConversion.ConvertLearningPathCertificate(
+                learningPathCertificate
+            );
         }
 
         public ICollection<LearningPathCertificateDto> GetAll()
         {
             var learningPathCertificateDtos = _context.LearningPathCertificates
-                .Select(lpc => Utils.DtoConversion.ConvertLearningPathCertificate(lpc))
+                .Select(
+                    lpc =>
+                        Utils.DtoConversion.ConvertLearningPathCertificate(lpc)
+                )
                 .ToList();
 
             return learningPathCertificateDtos;
         }
 
-        public LearningPathCertificateDto Create(NewLearningPathCertificateDto newLearningPathCertificateDto)
+        public ICollection<TraineeDto> GetAllCertificatedTraineesByLearningPathId(
+            int learningPathId
+        )
+        {
+            return _context.LearningPathCertificates
+                .Where(lpc => lpc.LearningPathId == learningPathId)
+                .Select(lpc => lpc.Trainee)
+                .Select(t => Utils.DtoConversion.ConvertTrainee(t))
+                .ToList();
+        }
+
+        public ICollection<LearningPathDto> GetAllLearningPathsByTraineeId(
+            int traineeId
+        )
+        {
+            return _context.LearningPathCertificates
+                .Where(lpc => lpc.TraineeId == traineeId)
+                .Select(lpc => lpc.LearningPath)
+                .Select(lp => Utils.DtoConversion.ConvertLearningPath(lp))
+                .ToList();
+        }
+
+        public LearningPathCertificateDto Create(
+            NewLearningPathCertificateDto newLearningPathCertificateDto
+        )
         {
             var learningPathCertificate = new LearningPathCertificate()
             {
@@ -49,29 +91,43 @@ namespace backend.Services.Repositories
             _context.LearningPathCertificates.Add(learningPathCertificate);
             _context.SaveChanges();
 
-            return Utils.DtoConversion.ConvertLearningPathCertificate(learningPathCertificate);
+            return Utils.DtoConversion.ConvertLearningPathCertificate(
+                learningPathCertificate
+            );
         }
 
-        public LearningPathCertificateDto DeleteById(int traineeId, int learningPathId)
+        public LearningPathCertificateDto DeleteById(
+            int traineeId,
+            int learningPathId
+        )
         {
-            var learningPathCertificate = _context.LearningPathCertificates.Single(
-                lpc => lpc.TraineeId == traineeId && lpc.LearningPathId == learningPathId
-            );
+            var learningPathCertificate =
+                _context.LearningPathCertificates.Single(
+                    lpc =>
+                        lpc.TraineeId == traineeId
+                        && lpc.LearningPathId == learningPathId
+                );
 
             _context.LearningPathCertificates.Remove(learningPathCertificate);
             _context.SaveChanges();
 
-            return Utils.DtoConversion.ConvertLearningPathCertificate(learningPathCertificate);
+            return Utils.DtoConversion.ConvertLearningPathCertificate(
+                learningPathCertificate
+            );
         }
 
         public LearningPathCertificateDto Update(
-            int traineeId, int learningPathId,
+            int traineeId,
+            int learningPathId,
             UpdateLearningPathCertificateDto updateLearningPathCertificateDto
         )
         {
-            var learningPathCertificate = _context.LearningPathCertificates.Single(
-                lpc => lpc.TraineeId == traineeId && lpc.LearningPathId == learningPathId
-            );
+            var learningPathCertificate =
+                _context.LearningPathCertificates.Single(
+                    lpc =>
+                        lpc.TraineeId == traineeId
+                        && lpc.LearningPathId == learningPathId
+                );
 
             Utils.EntityMapping.MapLearningPathCertificateFromDto(
                 ref learningPathCertificate,
@@ -81,7 +137,9 @@ namespace backend.Services.Repositories
             _context.LearningPathCertificates.Update(learningPathCertificate);
             _context.SaveChanges();
 
-            return Utils.DtoConversion.ConvertLearningPathCertificate(learningPathCertificate);
+            return Utils.DtoConversion.ConvertLearningPathCertificate(
+                learningPathCertificate
+            );
         }
     }
 }
