@@ -40,10 +40,10 @@ namespace backend.Services.Repositories
 
         public TraineeClassDto Create(NewTraineeClassDto newTraineeClassDto)
         {
-            int courseId = (int)
-                _context.Classes
-                    .Single(c => c.Id == newTraineeClassDto.ClassId)
-                    .CourseId;
+            int? courseId = _context.Classes
+                .Single(c => c.Id == newTraineeClassDto.ClassId)
+                .CourseId;
+
             var traineeClass = new TraineeClass()
             {
                 TraineeId = newTraineeClassDto.TraineeId,

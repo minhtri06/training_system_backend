@@ -212,19 +212,22 @@ namespace backend.Services.Repositories
                 };
             }
 
-            public static TraineeLearningState ConvertTraineeClassGPA(float GPA)
+            public static TraineeLearningState ConvertTraineeClassGPA(
+                float? GPA
+            )
             {
+                if (GPA == null)
+                {
+                    return TraineeLearningState.InProgress;
+                }
+
                 if (GPA >= 7)
                 {
                     return TraineeLearningState.Pass;
                 }
-                else if (GPA < 5)
-                {
-                    return TraineeLearningState.Fail;
-                }
                 else
                 {
-                    return TraineeLearningState.InProgress;
+                    return TraineeLearningState.Fail;
                 }
             }
         }
