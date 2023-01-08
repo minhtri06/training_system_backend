@@ -10,19 +10,19 @@ namespace backend.Controllers
     [ApiController]
     public class TraineeClassController : Controller
     {
-        private readonly ITraineeClassRepository _learningPathCourseRepo;
-        private readonly ICourseRepository _courseRepo;
-        private readonly ILearningPathRepository _learningPathRepo;
+        private readonly ITraineeClassRepository _traineeClassRepo;
+        private readonly ITraineeRepository _traineeRepo;
+        private readonly IClassRepository _classRepo;
 
         public TraineeClassController(
-            ITraineeClassRepository learningPathCourseRepo,
-            ICourseRepository courseRepo,
-            ILearningPathRepository learningPathRepo
+            ITraineeClassRepository traineeClassRepo,
+            ITraineeRepository traineeRepo,
+            IClassRepository classRepo
         )
         {
-            _learningPathCourseRepo = learningPathCourseRepo;
-            _courseRepo = courseRepo;
-            _learningPathRepo = learningPathRepo;
+            _traineeClassRepo = traineeClassRepo;
+            _traineeRepo = traineeRepo;
+            _classRepo = classRepo;
         }
 
         [HttpGet]
@@ -31,12 +31,12 @@ namespace backend.Controllers
         {
             try
             {
-                var learningPathCourses = _learningPathCourseRepo.GetAll();
+                var traineeClasses = _traineeClassRepo.GetAll();
 
                 return Ok(
                     Utils.CommonResponse.GetAllObjectsSuccessfully(
-                        "learning path courses",
-                        learningPathCourses
+                        "trainee classes",
+                        traineeClasses
                     )
                 );
             }
@@ -58,47 +58,43 @@ namespace backend.Controllers
             try
             {
                 if (
-                    _courseRepo.CheckIdExist(newTraineeClassDto.CourseId)
+                    _traineeRepo.CheckIdExist(newTraineeClassDto.TraineeId)
                     == false
                 )
                 {
                     return NotFound(
-                        Utils.CommonResponse.ObjectNotFound("course")
+                        Utils.CommonResponse.ObjectNotFound("trainee")
                     );
                 }
 
                 if (
-                    _learningPathRepo.CheckIdExist(
-                        newTraineeClassDto.LearningPathId
-                    ) == false
+                    _classRepo.CheckIdExist(newTraineeClassDto.ClassId) == false
                 )
                 {
                     return NotFound(
-                        Utils.CommonResponse.ObjectNotFound("learningPath")
+                        Utils.CommonResponse.ObjectNotFound("class")
                     );
                 }
 
                 if (
-                    _learningPathCourseRepo.CheckIdExist(
-                        newTraineeClassDto.CourseId,
-                        newTraineeClassDto.LearningPathId
+                    _traineeClassRepo.CheckIdExist(
+                        newTraineeClassDto.TraineeId,
+                        newTraineeClassDto.ClassId
                     )
                 )
                 {
                     return BadRequest(
-                        Utils.CommonResponse.ObjectAlreadyExist(
-                            "learningpath course"
-                        )
+                        Utils.CommonResponse.ObjectAlreadyExist("trainee class")
                     );
                 }
 
-                var newTraineeClass = _learningPathCourseRepo.Create(
+                var newTraineeClass = _traineeClassRepo.Create(
                     newTraineeClassDto
                 );
 
                 return Ok(
                     Utils.CommonResponse.CreateObjectSuccessfully(
-                        "learningpath course",
+                        "trainee class",
                         newTraineeClass
                     )
                 );
@@ -112,37 +108,27 @@ namespace backend.Controllers
             }
         }
 
-        [HttpGet("{courseId}/{learningPathId}")]
+        [HttpGet("{traineeId}/{classId}")]
         [Authorize]
-        public IActionResult GetTraineeClassById(
-            int courseId,
-            int learningPathId
-        )
+        public IActionResult GetTraineeClassById(int traineeId, int classId)
         {
             try
             {
-                if (
-                    _learningPathCourseRepo.CheckIdExist(
-                        courseId,
-                        learningPathId
-                    ) == false
-                )
+                if (_traineeClassRepo.CheckIdExist(traineeId, classId) == false)
                 {
                     return NotFound(
-                        Utils.CommonResponse.ObjectNotFound(
-                            "learning path course"
-                        )
+                        Utils.CommonResponse.ObjectNotFound("trainee class")
                     );
                 }
 
-                var learningPathCourse = _learningPathCourseRepo.GetById(
-                    courseId,
-                    learningPathId
+                var learningPathCourse = _traineeClassRepo.GetById(
+                    traineeId,
+                    classId
                 );
 
                 return Ok(
                     Utils.CommonResponse.GetObjectSuccessfully(
-                        "learning path course",
+                        "trainee class",
                         learningPathCourse
                     )
                 );
@@ -156,38 +142,27 @@ namespace backend.Controllers
             }
         }
 
-        [HttpDelete("{courseId}/{learningPathId}")]
+        [HttpDelete("{traineeId}/{classId}")]
         [Authorize(Roles = "Admin")]
-        public IActionResult DeleteTraineeClassById(
-            int courseId,
-            int learningPathId
-        )
+        public IActionResult DeleteTraineeClassById(int traineeId, int classId)
         {
             try
             {
-                if (
-                    _learningPathCourseRepo.CheckIdExist(
-                        courseId,
-                        learningPathId
-                    ) == false
-                )
+                if (_traineeClassRepo.CheckIdExist(traineeId, classId) == false)
                 {
                     return NotFound(
-                        Utils.CommonResponse.ObjectNotFound(
-                            "learning path course"
-                        )
+                        Utils.CommonResponse.ObjectNotFound("trainee class")
                     );
                 }
 
-                var deletedTraineeClass =
-                    _learningPathCourseRepo.DeleteById(
-                        courseId,
-                        learningPathId
-                    );
+                var deletedTraineeClass = _traineeClassRepo.DeleteById(
+                    traineeId,
+                    classId
+                );
 
                 return Ok(
                     Utils.CommonResponse.DeleteObjectSuccessfully(
-                        "learning path course",
+                        "trainee class",
                         deletedTraineeClass
                     )
                 );
@@ -201,39 +176,32 @@ namespace backend.Controllers
             }
         }
 
-        [HttpPut("{courseId}/{learningPathId}")]
+        [HttpPut("{traineeId}/{classId}")]
         [Authorize(Roles = "Admin")]
         public IActionResult UpdateTraineeClass(
-            int courseId,
-            int learningPathId,
+            int traineeId,
+            int classId,
             UpdateTraineeClassDto updateTraineeClassDto
         )
         {
             try
             {
-                if (
-                    _learningPathCourseRepo.CheckIdExist(
-                        courseId,
-                        learningPathId
-                    ) == false
-                )
+                if (_traineeClassRepo.CheckIdExist(traineeId, classId) == false)
                 {
                     return NotFound(
-                        Utils.CommonResponse.ObjectNotFound(
-                            "learning path course"
-                        )
+                        Utils.CommonResponse.ObjectNotFound("trainee class")
                     );
                 }
 
-                var updatedTraineeClass = _learningPathCourseRepo.Update(
-                    courseId,
-                    learningPathId,
+                var updatedTraineeClass = _traineeClassRepo.Update(
+                    traineeId,
+                    classId,
                     updateTraineeClassDto
                 );
 
                 return Ok(
                     Utils.CommonResponse.UpdateObjectSuccessfully(
-                        "learning path course",
+                        "trainee class",
                         updatedTraineeClass
                     )
                 );

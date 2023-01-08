@@ -189,9 +189,27 @@ namespace backend.Services.Repositories
                     TraineeId = traineeClass.TraineeId,
                     ClassId = traineeClass.ClassId,
                     GPA = traineeClass.GPA,
-                    status = traineeClass.status,
+                    Status = Utils.DtoConversion.ConvertTraineeClassGPA(
+                        traineeClass.GPA
+                    ),
                     CourseId = traineeClass.CourseId
                 };
+            }
+
+            public static TraineeLearningState ConvertTraineeClassGPA(float GPA)
+            {
+                if (GPA >= 7)
+                {
+                    return TraineeLearningState.Pass;
+                }
+                else if (GPA < 5)
+                {
+                    return TraineeLearningState.Fail;
+                }
+                else
+                {
+                    return TraineeLearningState.InProgress;
+                }
             }
         }
 
@@ -278,6 +296,18 @@ namespace backend.Services.Repositories
                 trainer.FirstName = updateTrainerDto.FirstName;
                 trainer.LastName = updateTrainerDto.LastName;
                 trainer.ImgLink = updateTrainerDto.ImgLink;
+            }
+
+            public static void MapTraineeClassFromUpdateDto(
+                ref TraineeClass traineeClass,
+                UpdateTraineeClassDto updateTraineeClassDto
+            )
+            {
+                traineeClass.GPA = updateTraineeClassDto.GPA;
+                traineeClass.Status =
+                    Utils.DtoConversion.ConvertTraineeClassGPA(
+                        updateTraineeClassDto.GPA
+                    );
             }
         }
 
