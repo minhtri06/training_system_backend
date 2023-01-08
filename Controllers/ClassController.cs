@@ -43,11 +43,11 @@ namespace backend.Controllers
                     )
                 );
             }
-            catch (Exception ex)
+            catch
             {
                 return StatusCode(
                     500,
-                    Utils.CommonResponse.ResponseException(ex.Message)
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
                 );
             }
         }
@@ -71,11 +71,11 @@ namespace backend.Controllers
                     Utils.CommonResponse.GetObjectSuccessfully("class", class_)
                 );
             }
-            catch (Exception ex)
+            catch
             {
                 return StatusCode(
                     500,
-                    Utils.CommonResponse.ResponseException(ex.Message)
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
                 );
             }
         }
@@ -95,11 +95,11 @@ namespace backend.Controllers
                     )
                 );
             }
-            catch (Exception ex)
+            catch
             {
                 return StatusCode(
                     500,
-                    Utils.CommonResponse.ResponseException(ex.Message)
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
                 );
             }
         }
@@ -126,11 +126,11 @@ namespace backend.Controllers
                     )
                 );
             }
-            catch (Exception ex)
+            catch
             {
                 return StatusCode(
                     500,
-                    Utils.CommonResponse.ResponseException(ex.Message)
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
                 );
             }
         }
@@ -160,11 +160,11 @@ namespace backend.Controllers
                     )
                 );
             }
-            catch (Exception ex)
+            catch
             {
                 return StatusCode(
                     500,
-                    Utils.CommonResponse.ResponseException(ex.Message)
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
                 );
             }
         }

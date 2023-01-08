@@ -25,6 +25,14 @@ namespace backend.Services.Repositories
                 .ToList();
         }
 
+        public ICollection<CourseDto> GetAllByLearningPathId(int learningPathId)
+        {
+            return _context.LearningPathCourses
+                .Where(lpc => lpc.LearningPathId == learningPathId)
+                .Select(lpc => Utils.DtoConversion.ConvertCourse(lpc.Course))
+                .ToList();
+        }
+
         public CourseDto? GetById(int courseId)
         {
             var course = _context.Courses.SingleOrDefault(

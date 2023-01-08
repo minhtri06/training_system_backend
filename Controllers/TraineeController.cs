@@ -339,7 +339,7 @@ namespace backend.Controllers
                     )
                 );
             }
-            catch (Exception ex)
+            catch
             {
                 return StatusCode(
                     500,

@@ -20,23 +20,36 @@ namespace backend.Controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult GetAllCourses()
+        public IActionResult GetAllCourses(
+            [FromQuery(Name = "learning-path-id")] int? learningPathId
+        )
         {
             try
             {
-                var courses = _courseRepo.GetAll();
+                if (learningPathId != null)
+                {
+                    return Ok(
+                        Utils.CommonResponse.GetAllObjectsSuccessfully(
+                            "courses of learning path id "
+                                + learningPathId.ToString(),
+                            _courseRepo.GetAllByLearningPathId(
+                                (int)learningPathId
+                            )
+                        )
+                    );
+                }
                 return Ok(
                     Utils.CommonResponse.GetAllObjectsSuccessfully(
                         "courses",
-                        courses
+                        _courseRepo.GetAll()
                     )
                 );
             }
-            catch (Exception ex)
+            catch
             {
                 return StatusCode(
                     500,
-                    Utils.CommonResponse.ResponseException(ex.Message)
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
                 );
             }
         }
@@ -60,11 +73,11 @@ namespace backend.Controllers
                     Utils.CommonResponse.GetObjectSuccessfully("course", course)
                 );
             }
-            catch (Exception ex)
+            catch
             {
                 return StatusCode(
                     500,
-                    Utils.CommonResponse.ResponseException(ex.Message)
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
                 );
             }
         }
@@ -84,11 +97,11 @@ namespace backend.Controllers
                     )
                 );
             }
-            catch (Exception ex)
+            catch
             {
                 return StatusCode(
                     500,
-                    Utils.CommonResponse.ResponseException(ex.Message)
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
                 );
             }
         }
@@ -115,11 +128,11 @@ namespace backend.Controllers
                     )
                 );
             }
-            catch (Exception ex)
+            catch
             {
                 return StatusCode(
                     500,
-                    Utils.CommonResponse.ResponseException(ex.Message)
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
                 );
             }
         }
@@ -149,11 +162,11 @@ namespace backend.Controllers
                     )
                 );
             }
-            catch (Exception ex)
+            catch
             {
                 return StatusCode(
                     500,
-                    Utils.CommonResponse.ResponseException(ex.Message)
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
                 );
             }
         }

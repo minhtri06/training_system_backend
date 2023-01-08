@@ -174,11 +174,11 @@ namespace backend.Controllers
                     )
                 );
             }
-            catch (Exception ex)
+            catch
             {
                 return StatusCode(
                     500,
-                    Utils.CommonResponse.ResponseException(ex.Message)
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
                 );
             }
         }
@@ -243,11 +243,11 @@ namespace backend.Controllers
                     )
                 );
             }
-            catch (Exception ex)
+            catch
             {
                 return StatusCode(
                     500,
-                    Utils.CommonResponse.ResponseException(ex.Message)
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
                 );
             }
         }
@@ -316,11 +316,11 @@ namespace backend.Controllers
                     )
                 );
             }
-            catch (Exception ex)
+            catch
             {
                 return StatusCode(
                     500,
-                    Utils.CommonResponse.ResponseException(ex.Message)
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
                 );
             }
         }

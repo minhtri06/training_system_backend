@@ -6,6 +6,7 @@ namespace backend.Services.Interfaces
     {
         bool CheckIdExist(int courseId);
         ICollection<CourseDto> GetAll();
+        ICollection<CourseDto> GetAllByLearningPathId(int learningPathId);
         CourseDto? GetById(int courseId);
         CourseDto Create(NewCourseDto newCourseDto);
         CourseDto? DeleteById(int courseId);
