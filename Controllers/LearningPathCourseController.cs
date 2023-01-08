@@ -29,14 +29,24 @@ namespace backend.Controllers
         [Authorize]
         public IActionResult GetAllLearningPathCourse()
         {
-            var learningPathCourses = _learningPathCourseRepo.GetAll();
+            try
+            {
+                var learningPathCourses = _learningPathCourseRepo.GetAll();
 
-            return Ok(
-                Utils.CommonResponse.GetAllObjectsSuccessfully(
-                    "learning path courses",
-                    learningPathCourses
-                )
-            );
+                return Ok(
+                    Utils.CommonResponse.GetAllObjectsSuccessfully(
+                        "learning path courses",
+                        learningPathCourses
+                    )
+                );
+            }
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpPost]
@@ -48,9 +58,8 @@ namespace backend.Controllers
             try
             {
                 if (
-                    _courseRepo.CheckIdExist(
-                        newLearningPathCourseDto.CourseId
-                    ) == false
+                    _courseRepo.CheckIdExist(newLearningPathCourseDto.CourseId)
+                    == false
                 )
                 {
                     return NotFound(
@@ -83,10 +92,9 @@ namespace backend.Controllers
                     );
                 }
 
-                var newLearningPathCourse =
-                    _learningPathCourseRepo.Create(
-                        newLearningPathCourseDto
-                    );
+                var newLearningPathCourse = _learningPathCourseRepo.Create(
+                    newLearningPathCourseDto
+                );
 
                 return Ok(
                     Utils.CommonResponse.CreateObjectSuccessfully(
@@ -106,73 +114,137 @@ namespace backend.Controllers
 
         [HttpGet("{courseId}/{learningPathId}")]
         [Authorize]
-        public IActionResult GetLearningPathCourseById(int courseId, int learningPathId)
+        public IActionResult GetLearningPathCourseById(
+            int courseId,
+            int learningPathId
+        )
         {
-            if (_learningPathCourseRepo.CheckIdExist(courseId, learningPathId) == false)
+            try
             {
-                return NotFound(
-                    Utils.CommonResponse.ObjectNotFound("learning path course")
+                if (
+                    _learningPathCourseRepo.CheckIdExist(
+                        courseId,
+                        learningPathId
+                    ) == false
+                )
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound(
+                            "learning path course"
+                        )
+                    );
+                }
+
+                var learningPathCourse = _learningPathCourseRepo.GetById(
+                    courseId,
+                    learningPathId
+                );
+
+                return Ok(
+                    Utils.CommonResponse.GetObjectSuccessfully(
+                        "learning path course",
+                        learningPathCourse
+                    )
                 );
             }
-
-            var learningPathCourse = _learningPathCourseRepo.GetById(courseId, learningPathId);
-
-            return Ok(
-                Utils.CommonResponse.GetObjectSuccessfully(
-                    "learning path course",
-                    learningPathCourse
-                )
-            );
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpDelete("{courseId}/{learningPathId}")]
         [Authorize(Roles = "Admin")]
-        public IActionResult DeleteLearningPathCourseById(int courseId, int learningPathId)
+        public IActionResult DeleteLearningPathCourseById(
+            int courseId,
+            int learningPathId
+        )
         {
-            if (_learningPathCourseRepo.CheckIdExist(courseId, learningPathId) == false)
+            try
             {
-                return NotFound(
-                    Utils.CommonResponse.ObjectNotFound("learning path course")
+                if (
+                    _learningPathCourseRepo.CheckIdExist(
+                        courseId,
+                        learningPathId
+                    ) == false
+                )
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound(
+                            "learning path course"
+                        )
+                    );
+                }
+
+                var deletedLearningPathCourse =
+                    _learningPathCourseRepo.DeleteById(
+                        courseId,
+                        learningPathId
+                    );
+
+                return Ok(
+                    Utils.CommonResponse.DeleteObjectSuccessfully(
+                        "learning path course",
+                        deletedLearningPathCourse
+                    )
                 );
             }
-
-            var deletedLearningPathCourse = _learningPathCourseRepo.DeleteById(
-                courseId, learningPathId
-            );
-
-            return Ok(
-                Utils.CommonResponse.DeleteObjectSuccessfully(
-                    "learning path course",
-                    deletedLearningPathCourse
-                )
-            );
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpPut("{courseId}/{learningPathId}")]
         [Authorize(Roles = "Admin")]
         public IActionResult UpdateLearningPathCourse(
-            int courseId, int learningPathId,
+            int courseId,
+            int learningPathId,
             UpdateLearningPathCourseDto updateLearningPathCourseDto
         )
         {
-            if (_learningPathCourseRepo.CheckIdExist(courseId, learningPathId) == false)
+            try
             {
-                return NotFound(
-                    Utils.CommonResponse.ObjectNotFound("learning path course")
+                if (
+                    _learningPathCourseRepo.CheckIdExist(
+                        courseId,
+                        learningPathId
+                    ) == false
+                )
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound(
+                            "learning path course"
+                        )
+                    );
+                }
+
+                var updatedLearningPathCourse = _learningPathCourseRepo.Update(
+                    courseId,
+                    learningPathId,
+                    updateLearningPathCourseDto
+                );
+
+                return Ok(
+                    Utils.CommonResponse.UpdateObjectSuccessfully(
+                        "learning path course",
+                        updatedLearningPathCourse
+                    )
                 );
             }
-
-            var updatedLearningPathCourse = _learningPathCourseRepo.Update(
-                courseId, learningPathId,
-                updateLearningPathCourseDto
-            );
-
-            return Ok(
-                Utils.CommonResponse.UpdateObjectSuccessfully(
-                    "learning path course",
-                    updatedLearningPathCourse
-                )
-            );
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
     }
 }

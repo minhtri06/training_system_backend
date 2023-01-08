@@ -30,80 +30,112 @@ namespace backend.Controllers
         [Authorize]
         public IActionResult GetAllTrainees()
         {
-            var trainees = _traineeRepo.GetAll();
+            try
+            {
+                var trainees = _traineeRepo.GetAll();
 
-            return Ok(
-                new ApiResponseDto()
-                {
-                    Success = true,
-                    Message = "Get all trainees successfull",
-                    Data = trainees
-                }
-            );
+                return Ok(
+                    new ApiResponseDto()
+                    {
+                        Success = true,
+                        Message = "Get all trainees successfull",
+                        Data = trainees
+                    }
+                );
+            }
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public IActionResult CreateTrainee(NewTraineeDto newTraineeDto)
         {
-            if (_traineeRepo.CheckUsernameExist(newTraineeDto.Username))
+            try
             {
-                return BadRequest(Utils.CommonResponse.USERNAME_ALREADY_EXISTS);
-            }
-
-            if (newTraineeDto.Username.Length < 3)
-            {
-                return BadRequest(
-                    new ApiResponseDto()
-                    {
-                        Success = false,
-                        Message = "Username must longer than 2 characters"
-                    }
-                );
-            }
-
-            if (newTraineeDto.Password.Length < 3)
-            {
-                return BadRequest(
-                    new ApiResponseDto()
-                    {
-                        Success = false,
-                        Message = "Password must longer than 2 characters"
-                    }
-                );
-            }
-
-            var newTrainee = _traineeRepo.Create(newTraineeDto);
-
-            return Ok(
-                new ApiResponseDto()
+                if (_traineeRepo.CheckUsernameExist(newTraineeDto.Username))
                 {
-                    Success = true,
-                    Message = "Trainee created successfully",
-                    Data = newTrainee
+                    return BadRequest(
+                        Utils.CommonResponse.USERNAME_ALREADY_EXISTS
+                    );
                 }
-            );
+
+                if (newTraineeDto.Username.Length < 3)
+                {
+                    return BadRequest(
+                        new ApiResponseDto()
+                        {
+                            Success = false,
+                            Message = "Username must longer than 2 characters"
+                        }
+                    );
+                }
+
+                if (newTraineeDto.Password.Length < 3)
+                {
+                    return BadRequest(
+                        new ApiResponseDto()
+                        {
+                            Success = false,
+                            Message = "Password must longer than 2 characters"
+                        }
+                    );
+                }
+
+                var newTrainee = _traineeRepo.Create(newTraineeDto);
+
+                return Ok(
+                    new ApiResponseDto()
+                    {
+                        Success = true,
+                        Message = "Trainee created successfully",
+                        Data = newTrainee
+                    }
+                );
+            }
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpGet("{traineeId}")]
         [Authorize]
         public IActionResult GetTraineeById(int traineeId)
         {
-            var trainee = _traineeRepo.GetById(traineeId);
-
-            if (trainee == null)
+            try
             {
-                return NotFound(Utils.CommonResponse.NOT_FOUND);
-            }
+                var trainee = _traineeRepo.GetById(traineeId);
 
-            return Ok(
-                new ApiResponseDto()
+                if (trainee == null)
                 {
-                    Success = true,
-                    Message = "Get trainee successfully",
-                    Data = new List<TraineeDto>() { trainee }
+                    return NotFound(Utils.CommonResponse.NOT_FOUND);
                 }
-            );
+
+                return Ok(
+                    new ApiResponseDto()
+                    {
+                        Success = true,
+                        Message = "Get trainee successfully",
+                        Data = new List<TraineeDto>() { trainee }
+                    }
+                );
+            }
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpPut("{traineeId}")]
@@ -134,11 +166,11 @@ namespace backend.Controllers
                     )
                 );
             }
-            catch (Exception ex)
+            catch
             {
                 return StatusCode(
                     500,
-                    Utils.CommonResponse.ResponseException(ex.Message)
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
                 );
             }
         }
@@ -147,19 +179,31 @@ namespace backend.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteTrainee(int traineeId)
         {
-            if (_traineeRepo.CheckIdExist(traineeId) == false)
+            try
             {
-                return NotFound(Utils.CommonResponse.ObjectNotFound("trainee"));
+                if (_traineeRepo.CheckIdExist(traineeId) == false)
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound("trainee")
+                    );
+                }
+
+                var deletedTrainee = _traineeRepo.DeleteById(traineeId);
+
+                return Ok(
+                    Utils.CommonResponse.DeleteObjectSuccessfully(
+                        "trainee",
+                        deletedTrainee
+                    )
+                );
             }
-
-            var deletedTrainee = _traineeRepo.DeleteById(traineeId);
-
-            return Ok(
-                Utils.CommonResponse.DeleteObjectSuccessfully(
-                    "trainee",
-                    deletedTrainee
-                )
-            );
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpPost("login")]
@@ -219,11 +263,11 @@ namespace backend.Controllers
                     )
                 );
             }
-            catch (Exception ex)
+            catch
             {
                 return StatusCode(
                     500,
-                    Utils.CommonResponse.ResponseException(ex.Message)
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
                 );
             }
         }
@@ -299,7 +343,7 @@ namespace backend.Controllers
             {
                 return StatusCode(
                     500,
-                    Utils.CommonResponse.ResponseException(ex.Message)
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
                 );
             }
         }

@@ -29,79 +29,121 @@ namespace backend.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult GetAllAdminUsers()
         {
-            var adminUsers = _adminUserRepo.GetAll();
+            try
+            {
+                var adminUsers = _adminUserRepo.GetAll();
 
-            return Ok(
-                Utils.CommonResponse.GetAllObjectsSuccessfully(
-                    "admin user",
-                    adminUsers
-                )
-            );
+                return Ok(
+                    Utils.CommonResponse.GetAllObjectsSuccessfully(
+                        "admin user",
+                        adminUsers
+                    )
+                );
+            }
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public IActionResult CreateAdminUser(NewAdminUserDto newAdminUserDto)
         {
-            if (_adminUserRepo.CheckUsernameExist(newAdminUserDto.Username))
+            try
             {
-                return BadRequest(Utils.CommonResponse.USERNAME_ALREADY_EXISTS);
+                if (_adminUserRepo.CheckUsernameExist(newAdminUserDto.Username))
+                {
+                    return BadRequest(
+                        Utils.CommonResponse.USERNAME_ALREADY_EXISTS
+                    );
+                }
+
+                var newAdminUser = _adminUserRepo.Create(newAdminUserDto);
+
+                return Ok(
+                    Utils.CommonResponse.CreateObjectSuccessfully(
+                        "admin user",
+                        newAdminUser
+                    )
+                );
             }
-
-            var newAdminUser = _adminUserRepo.Create(newAdminUserDto);
-
-            return Ok(
-                Utils.CommonResponse.CreateObjectSuccessfully(
-                    "admin user",
-                    newAdminUser
-                )
-            );
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpGet("{adminUserId}")]
         [Authorize(Roles = "Admin")]
         public IActionResult GetAdminUserById(int adminUserId)
         {
-            var adminUser = _adminUserRepo.GetById(adminUserId);
-
-            if (adminUser == null)
+            try
             {
-                return NotFound(
-                    Utils.CommonResponse.ObjectNotFound("admin user")
+                var adminUser = _adminUserRepo.GetById(adminUserId);
+
+                if (adminUser == null)
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound("admin user")
+                    );
+                }
+
+                return Ok(
+                    Utils.CommonResponse.GetObjectSuccessfully(
+                        "admin user",
+                        adminUser
+                    )
                 );
             }
-
-            return Ok(
-                Utils.CommonResponse.GetObjectSuccessfully(
-                    "admin user",
-                    adminUser
-                )
-            );
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpDelete("{adminUserId}")]
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteAdminUserById(int adminUserId)
         {
-            var adminUser = _adminUserRepo.DeleteById(adminUserId);
-
-            if (adminUser == null)
+            try
             {
-                return BadRequest(
-                    new ApiResponseDto()
-                    {
-                        Success = false,
-                        Message = "Delete fail"
-                    }
+                var adminUser = _adminUserRepo.DeleteById(adminUserId);
+
+                if (adminUser == null)
+                {
+                    return BadRequest(
+                        new ApiResponseDto()
+                        {
+                            Success = false,
+                            Message = "Delete fail"
+                        }
+                    );
+                }
+
+                return Ok(
+                    Utils.CommonResponse.DeleteObjectSuccessfully(
+                        "admin user",
+                        adminUser
+                    )
                 );
             }
-
-            return Ok(
-                Utils.CommonResponse.DeleteObjectSuccessfully(
-                    "admin user",
-                    adminUser
-                )
-            );
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpPut("{adminUserId}")]

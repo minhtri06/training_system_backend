@@ -24,71 +24,108 @@ namespace backend.Controllers
         [Authorize]
         public IActionResult GetAllTrainers()
         {
-            var trainers = _trainerRepo.GetAll();
+            try
+            {
+                var trainers = _trainerRepo.GetAll();
 
-            return Ok(
-                Utils.CommonResponse.GetAllObjectsSuccessfully(
-                    "trainers",
-                    trainers
-                )
-            );
+                return Ok(
+                    Utils.CommonResponse.GetAllObjectsSuccessfully(
+                        "trainers",
+                        trainers
+                    )
+                );
+            }
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public IActionResult CreateTrainer(NewTrainerDto newTrainerDto)
         {
-            if (_trainerRepo.CheckUsernameExist(newTrainerDto.Username))
+            try
             {
-                return BadRequest(Utils.CommonResponse.USERNAME_ALREADY_EXISTS);
-            }
+                if (_trainerRepo.CheckUsernameExist(newTrainerDto.Username))
+                {
+                    return BadRequest(
+                        Utils.CommonResponse.USERNAME_ALREADY_EXISTS
+                    );
+                }
 
-            if (newTrainerDto.Username.Length < 3)
-            {
-                return BadRequest(
-                    new ApiResponseDto()
-                    {
-                        Success = false,
-                        Message = "Username must longer than 2 characters"
-                    }
+                if (newTrainerDto.Username.Length < 3)
+                {
+                    return BadRequest(
+                        new ApiResponseDto()
+                        {
+                            Success = false,
+                            Message = "Username must longer than 2 characters"
+                        }
+                    );
+                }
+
+                if (newTrainerDto.Password.Length < 3)
+                {
+                    return BadRequest(
+                        new ApiResponseDto()
+                        {
+                            Success = false,
+                            Message = "Password must longer than 2 characters"
+                        }
+                    );
+                }
+
+                var newTrainer = _trainerRepo.Create(newTrainerDto);
+
+                return Ok(
+                    Utils.CommonResponse.CreateObjectSuccessfully(
+                        "trainer",
+                        newTrainer
+                    )
                 );
             }
-
-            if (newTrainerDto.Password.Length < 3)
+            catch
             {
-                return BadRequest(
-                    new ApiResponseDto()
-                    {
-                        Success = false,
-                        Message = "Password must longer than 2 characters"
-                    }
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
                 );
             }
-
-            var newTrainer = _trainerRepo.Create(newTrainerDto);
-
-            return Ok(
-                Utils.CommonResponse.CreateObjectSuccessfully(
-                    "trainer",
-                    newTrainer
-                )
-            );
         }
 
         [HttpGet("{trainerId}")]
         [Authorize]
         public IActionResult GetTrainerById(int trainerId)
         {
-            if (_trainerRepo.CheckIdExist(trainerId) == false)
+            try
             {
-                return NotFound(Utils.CommonResponse.ObjectNotFound("trainer"));
+                if (_trainerRepo.CheckIdExist(trainerId) == false)
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound("trainer")
+                    );
+                }
+
+                var trainer = _trainerRepo.GetById(trainerId);
+
+                return Ok(
+                    Utils.CommonResponse.GetObjectSuccessfully(
+                        "trainer",
+                        trainer
+                    )
+                );
             }
-
-            var trainer = _trainerRepo.GetById(trainerId);
-
-            return Ok(
-                Utils.CommonResponse.GetObjectSuccessfully("trainer", trainer)
-            );
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpPut("{trainerId}")]
@@ -119,11 +156,11 @@ namespace backend.Controllers
                     )
                 );
             }
-            catch (Exception ex)
+            catch
             {
                 return StatusCode(
                     500,
-                    Utils.CommonResponse.ResponseException(ex.Message)
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
                 );
             }
         }
@@ -132,19 +169,31 @@ namespace backend.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteTrainerById(int trainerId)
         {
-            if (_trainerRepo.CheckIdExist(trainerId) == false)
+            try
             {
-                return NotFound(Utils.CommonResponse.ObjectNotFound("trainer"));
+                if (_trainerRepo.CheckIdExist(trainerId) == false)
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound("trainer")
+                    );
+                }
+
+                var deletedTrainer = _trainerRepo.DeleteById(trainerId);
+
+                return Ok(
+                    Utils.CommonResponse.DeleteObjectSuccessfully(
+                        "trainer",
+                        deletedTrainer
+                    )
+                );
             }
-
-            var deletedTrainer = _trainerRepo.DeleteById(trainerId);
-
-            return Ok(
-                Utils.CommonResponse.DeleteObjectSuccessfully(
-                    "trainer",
-                    deletedTrainer
-                )
-            );
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
     }
 }

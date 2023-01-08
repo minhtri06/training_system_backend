@@ -29,14 +29,25 @@ namespace backend.Controllers
         [Authorize]
         public IActionResult GetAllLearningPathCertificate()
         {
-            var learningPathCertificates = _learningPathCertificateRepo.GetAll();
+            try
+            {
+                var learningPathCertificates =
+                    _learningPathCertificateRepo.GetAll();
 
-            return Ok(
-                Utils.CommonResponse.GetAllObjectsSuccessfully(
-                    "learning path certificates",
-                    learningPathCertificates
-                )
-            );
+                return Ok(
+                    Utils.CommonResponse.GetAllObjectsSuccessfully(
+                        "learning path certificates",
+                        learningPathCertificates
+                    )
+                );
+            }
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpPost]
@@ -106,73 +117,139 @@ namespace backend.Controllers
 
         [HttpGet("{traineeId}/{learningPathId}")]
         [Authorize]
-        public IActionResult GetLearningPathCertificateById(int traineeId, int learningPathId)
+        public IActionResult GetLearningPathCertificateById(
+            int traineeId,
+            int learningPathId
+        )
         {
-            if (_learningPathCertificateRepo.CheckIdExist(traineeId, learningPathId) == false)
+            try
             {
-                return NotFound(
-                    Utils.CommonResponse.ObjectNotFound("learning path certificate")
+                if (
+                    _learningPathCertificateRepo.CheckIdExist(
+                        traineeId,
+                        learningPathId
+                    ) == false
+                )
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound(
+                            "learning path certificate"
+                        )
+                    );
+                }
+
+                var learningPathCertificate =
+                    _learningPathCertificateRepo.GetById(
+                        traineeId,
+                        learningPathId
+                    );
+
+                return Ok(
+                    Utils.CommonResponse.GetObjectSuccessfully(
+                        "learning path certificate",
+                        learningPathCertificate
+                    )
                 );
             }
-
-            var learningPathCertificate = _learningPathCertificateRepo.GetById(traineeId, learningPathId);
-
-            return Ok(
-                Utils.CommonResponse.GetObjectSuccessfully(
-                    "learning path certificate",
-                    learningPathCertificate
-                )
-            );
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpDelete("{traineeId}/{learningPathId}")]
         [Authorize(Roles = "Admin")]
-        public IActionResult DeleteLearningPathCertificateById(int traineeId, int learningPathId)
+        public IActionResult DeleteLearningPathCertificateById(
+            int traineeId,
+            int learningPathId
+        )
         {
-            if (_learningPathCertificateRepo.CheckIdExist(traineeId, learningPathId) == false)
+            try
             {
-                return NotFound(
-                    Utils.CommonResponse.ObjectNotFound("learning path certificate")
+                if (
+                    _learningPathCertificateRepo.CheckIdExist(
+                        traineeId,
+                        learningPathId
+                    ) == false
+                )
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound(
+                            "learning path certificate"
+                        )
+                    );
+                }
+
+                var deletedLearningPathCertificate =
+                    _learningPathCertificateRepo.DeleteById(
+                        traineeId,
+                        learningPathId
+                    );
+
+                return Ok(
+                    Utils.CommonResponse.DeleteObjectSuccessfully(
+                        "learning path certificate",
+                        deletedLearningPathCertificate
+                    )
                 );
             }
-
-            var deletedLearningPathCertificate = _learningPathCertificateRepo.DeleteById(
-                traineeId, learningPathId
-            );
-
-            return Ok(
-                Utils.CommonResponse.DeleteObjectSuccessfully(
-                    "learning path certificate",
-                    deletedLearningPathCertificate
-                )
-            );
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpPut("{traineeId}/{learningPathId}")]
         [Authorize(Roles = "Admin")]
         public IActionResult UpdateLearningPathCertificate(
-            int traineeId, int learningPathId,
+            int traineeId,
+            int learningPathId,
             UpdateLearningPathCertificateDto updateLearningPathCertificateDto
         )
         {
-            if (_learningPathCertificateRepo.CheckIdExist(traineeId, learningPathId) == false)
+            try
             {
-                return NotFound(
-                    Utils.CommonResponse.ObjectNotFound("learning path certificate")
+                if (
+                    _learningPathCertificateRepo.CheckIdExist(
+                        traineeId,
+                        learningPathId
+                    ) == false
+                )
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound(
+                            "learning path certificate"
+                        )
+                    );
+                }
+
+                var updatedLearningPathCertificate =
+                    _learningPathCertificateRepo.Update(
+                        traineeId,
+                        learningPathId,
+                        updateLearningPathCertificateDto
+                    );
+
+                return Ok(
+                    Utils.CommonResponse.UpdateObjectSuccessfully(
+                        "learning path certificate",
+                        updatedLearningPathCertificate
+                    )
                 );
             }
-
-            var updatedLearningPathCertificate = _learningPathCertificateRepo.Update(
-                traineeId, learningPathId,
-                updateLearningPathCertificateDto
-            );
-
-            return Ok(
-                Utils.CommonResponse.UpdateObjectSuccessfully(
-                    "learning path certificate",
-                    updatedLearningPathCertificate
-                )
-            );
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
     }
 }

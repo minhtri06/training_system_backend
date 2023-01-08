@@ -26,14 +26,24 @@ namespace backend.Controllers
         [Authorize]
         public IActionResult GetAllLearningPath()
         {
-            var learningPaths = _learningPathRepo.GetAll();
+            try
+            {
+                var learningPaths = _learningPathRepo.GetAll();
 
-            return Ok(
-                Utils.CommonResponse.GetAllObjectsSuccessfully(
-                    "learning paths",
-                    learningPaths
-                )
-            );
+                return Ok(
+                    Utils.CommonResponse.GetAllObjectsSuccessfully(
+                        "learning paths",
+                        learningPaths
+                    )
+                );
+            }
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpPost]
@@ -42,71 +52,102 @@ namespace backend.Controllers
             NewLearningPathDto newLearningPathDto
         )
         {
-            if (newLearningPathDto.ForRoleId != null)
+            try
             {
-                if (
-                    _roleRepo.CheckIdExist((int)newLearningPathDto.ForRoleId)
-                    == false
-                )
+                if (newLearningPathDto.ForRoleId != null)
                 {
-                    return NotFound(
-                        Utils.CommonResponse.ObjectNotFound("role id")
-                    );
+                    if (
+                        _roleRepo.CheckIdExist(
+                            (int)newLearningPathDto.ForRoleId
+                        ) == false
+                    )
+                    {
+                        return NotFound(
+                            Utils.CommonResponse.ObjectNotFound("role id")
+                        );
+                    }
                 }
+
+                var learningPath = _learningPathRepo.Create(newLearningPathDto);
+
+                return Ok(
+                    Utils.CommonResponse.CreateObjectSuccessfully(
+                        "learning path",
+                        learningPath
+                    )
+                );
             }
-
-            var learningPath = _learningPathRepo.Create(newLearningPathDto);
-
-            return Ok(
-                Utils.CommonResponse.CreateObjectSuccessfully(
-                    "learning path",
-                    learningPath
-                )
-            );
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpGet("{learningPathId}")]
         [Authorize]
         public IActionResult GetLearningPathById(int learningPathId)
         {
-            if (_learningPathRepo.CheckIdExist(learningPathId) == false)
+            try
             {
-                return NotFound(
-                    Utils.CommonResponse.ObjectNotFound("learning path")
+                if (_learningPathRepo.CheckIdExist(learningPathId) == false)
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound("learning path")
+                    );
+                }
+
+                var learningPath = _learningPathRepo.GetById(learningPathId);
+
+                return Ok(
+                    Utils.CommonResponse.GetObjectSuccessfully(
+                        "learning path",
+                        learningPath
+                    )
                 );
             }
-
-            var learningPath = _learningPathRepo.GetById(learningPathId);
-
-            return Ok(
-                Utils.CommonResponse.GetObjectSuccessfully(
-                    "learning path",
-                    learningPath
-                )
-            );
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpDelete("{learningPathId}")]
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteLearningPathById(int learningPathId)
         {
-            if (_learningPathRepo.CheckIdExist(learningPathId) == false)
+            try
             {
-                return NotFound(
-                    Utils.CommonResponse.ObjectNotFound("learning path")
+                if (_learningPathRepo.CheckIdExist(learningPathId) == false)
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound("learning path")
+                    );
+                }
+
+                var deletedLearningPath = _learningPathRepo.DeleteById(
+                    learningPathId
+                );
+
+                return Ok(
+                    Utils.CommonResponse.DeleteObjectSuccessfully(
+                        "learning path",
+                        deletedLearningPath
+                    )
                 );
             }
-
-            var deletedLearningPath = _learningPathRepo.DeleteById(
-                learningPathId
-            );
-
-            return Ok(
-                Utils.CommonResponse.DeleteObjectSuccessfully(
-                    "learning path",
-                    deletedLearningPath
-                )
-            );
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
 
         [HttpPut("{learningPathId}")]
@@ -116,37 +157,48 @@ namespace backend.Controllers
             UpdateLearningPathDto updateLearningPathDto
         )
         {
-            if (_learningPathRepo.CheckIdExist(learningPathId) == false)
+            try
             {
-                return NotFound(
-                    Utils.CommonResponse.ObjectNotFound("learning path id")
-                );
-            }
-
-            if (updateLearningPathDto.ForRoleId != null)
-            {
-                if (
-                    _roleRepo.CheckIdExist((int)updateLearningPathDto.ForRoleId)
-                    == false
-                )
+                if (_learningPathRepo.CheckIdExist(learningPathId) == false)
                 {
                     return NotFound(
-                        Utils.CommonResponse.ObjectNotFound("role id")
+                        Utils.CommonResponse.ObjectNotFound("learning path id")
                     );
                 }
+
+                if (updateLearningPathDto.ForRoleId != null)
+                {
+                    if (
+                        _roleRepo.CheckIdExist(
+                            (int)updateLearningPathDto.ForRoleId
+                        ) == false
+                    )
+                    {
+                        return NotFound(
+                            Utils.CommonResponse.ObjectNotFound("role id")
+                        );
+                    }
+                }
+
+                var updatedLearningPath = _learningPathRepo.Update(
+                    learningPathId,
+                    updateLearningPathDto
+                );
+
+                return Ok(
+                    Utils.CommonResponse.UpdateObjectSuccessfully(
+                        "learning path",
+                        updatedLearningPath
+                    )
+                );
             }
-
-            var updatedLearningPath = _learningPathRepo.Update(
-                learningPathId,
-                updateLearningPathDto
-            );
-
-            return Ok(
-                Utils.CommonResponse.UpdateObjectSuccessfully(
-                    "learning path",
-                    updatedLearningPath
-                )
-            );
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
         }
     }
 }
