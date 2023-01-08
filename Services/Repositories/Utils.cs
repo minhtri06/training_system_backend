@@ -178,6 +178,18 @@ namespace backend.Services.Repositories
                     CourseOrder = learningPathCourse.CourseOrder
                 };
             }
+
+            public static TraineeClassDto ConvertTraineeClass(
+                TraineeClass traineeClass
+            )
+            {
+                return new TraineeClassDto()
+                {
+                    TraineeId = traineeClass
+                    LearningPathId = traineeClass.LearningPathId,
+                    CourseOrder = traineeClass.CourseOrder
+                };
+            }
         }
 
         public class EntityMapping
