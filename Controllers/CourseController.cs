@@ -21,7 +21,7 @@ namespace backend.Controllers
         [HttpGet]
         [Authorize]
         public IActionResult GetAllCourses(
-            [FromQuery(Name = "learning-path-id")] int? learningPathId
+            [FromQuery(Name = "learningPathId")] int? learningPathId
         )
         {
             try
