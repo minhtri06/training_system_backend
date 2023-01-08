@@ -205,7 +205,10 @@ namespace backend.Services.Repositories
                     Id = lPathCert.Trainee.Id,
                     FirstName = lPathCert.Trainee.FirstName,
                     LastName = lPathCert.Trainee.LastName,
+                    SystemRole = lPathCert.Trainee.SystemRole,
                     Level = lPathCert.Trainee.Level,
+                    RoleId = lPathCert.Trainee.RoleId,
+                    DepartmentId = lPathCert.Trainee.DepartmentId,
                     ImgLink = lPathCert.Trainee.ImgLink,
                     StartDate = lPathCert.StartDate,
                     Duration = lPathCert.Duration
