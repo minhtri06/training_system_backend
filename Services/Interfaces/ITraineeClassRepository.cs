@@ -1,4 +1,5 @@
 using backend.Dto.TraineeClass;
+using backend.Models;
 
 namespace backend.Services.Interfaces
 {
@@ -10,7 +11,8 @@ namespace backend.Services.Interfaces
         TraineeClassDto Create(NewTraineeClassDto newTraineeClassDto);
         TraineeClassDto DeleteById(int traineeId, int classId);
         TraineeClassDto Update(
-            int traineeId, int classId,
+            int traineeId,
+            int classId,
             UpdateTraineeClassDto updateTraineeClassDto
         );
     }

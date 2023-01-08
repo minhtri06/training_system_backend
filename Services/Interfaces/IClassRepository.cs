@@ -4,6 +4,7 @@ namespace backend.Services.Interfaces
 {
     public interface IClassRepository
     {
+        bool CheckIdExist(int classId);
         ICollection<ClassDto> GetAll();
         ICollection<ClassDto> GetAllByCourseId(int courseId);
         ClassDto? GetById(int classId);

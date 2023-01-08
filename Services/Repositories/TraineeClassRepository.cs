@@ -40,12 +40,19 @@ namespace backend.Services.Repositories
 
         public TraineeClassDto Create(NewTraineeClassDto newTraineeClassDto)
         {
-            if (newTraineeClassDto.GPA) { }
+            int courseId = (int)
+                _context.Classes
+                    .Single(c => c.Id == newTraineeClassDto.ClassId)
+                    .CourseId;
             var traineeClass = new TraineeClass()
             {
                 TraineeId = newTraineeClassDto.TraineeId,
                 ClassId = newTraineeClassDto.ClassId,
-                GPA = newTraineeClassDto.GPA
+                GPA = newTraineeClassDto.GPA,
+                Status = Utils.DtoConversion.ConvertTraineeClassGPA(
+                    newTraineeClassDto.GPA
+                ),
+                CourseId = courseId
             };
 
             _context.TraineeClasses.Add(traineeClass);
@@ -57,12 +64,10 @@ namespace backend.Services.Repositories
         public TraineeClassDto DeleteById(int traineeId, int classId)
         {
             var traineeClass = _context.TraineeClasses.Single(
-                tc =>
-                    tc.CourseId == courseId
-                    && tc.LearningPathId == learningPathId
+                tc => tc.TraineeId == traineeId && tc.ClassId == classId
             );
 
-            _context.TraineeClasss.Remove(traineeClass);
+            _context.TraineeClasses.Remove(traineeClass);
             _context.SaveChanges();
 
             return Utils.DtoConversion.ConvertTraineeClass(traineeClass);
@@ -74,18 +79,16 @@ namespace backend.Services.Repositories
             UpdateTraineeClassDto updateTraineeClassDto
         )
         {
-            var traineeClass = _context.TraineeClasss.Single(
-                lpc =>
-                    lpc.CourseId == courseId
-                    && lpc.LearningPathId == learningPathId
+            var traineeClass = _context.TraineeClasses.Single(
+                tc => tc.TraineeId == traineeId && tc.ClassId == classId
             );
 
-            Utils.EntityMapping.MapTraineeClassFromDto(
+            Utils.EntityMapping.MapTraineeClassFromUpdateDto(
                 ref traineeClass,
                 updateTraineeClassDto
             );
 
-            _context.TraineeClasss.Update(traineeClass);
+            _context.TraineeClasses.Update(traineeClass);
             _context.SaveChanges();
 
             return Utils.DtoConversion.ConvertTraineeClass(traineeClass);

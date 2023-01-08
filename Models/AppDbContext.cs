@@ -185,7 +185,7 @@ namespace backend.Models
             modelBuilder.Entity<TraineeClass>(e =>
             {
                 e.HasKey(tc => new { tc.TraineeId, tc.ClassId });
-                e.Property(tc => tc.status)
+                e.Property(tc => tc.Status)
                     .HasDefaultValue(TraineeLearningState.InProgress);
 
                 e.HasOne(tc => tc.Trainee)
