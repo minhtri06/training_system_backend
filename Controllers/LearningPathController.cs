@@ -13,16 +13,19 @@ namespace backend.Controllers
         private readonly ILearningPathRepository _learningPathRepo;
         private readonly IRoleRepository _roleRepo;
         private readonly ILearningPathCertificateRepository _learningPathCertificateRepo;
+        private readonly IDepartmentLearningPathRepository _departmentLearningPathRepo;
 
         public LearningPathController(
             ILearningPathRepository learningPathRepo,
             IRoleRepository roleRepo,
-            ILearningPathCertificateRepository learningPathCertificateRepo
+            ILearningPathCertificateRepository learningPathCertificateRepo,
+            IDepartmentLearningPathRepository departmentLearningPathRepo
         )
         {
             _learningPathRepo = learningPathRepo;
             _roleRepo = roleRepo;
             _learningPathCertificateRepo = learningPathCertificateRepo;
+            _departmentLearningPathRepo = departmentLearningPathRepo;
         }
 
         [HttpGet]
@@ -144,6 +147,40 @@ namespace backend.Controllers
                     Utils.CommonResponse.GetAllObjectsSuccessfully(
                         "certificated trainees",
                         certificatedTrainees
+                    )
+                );
+            }
+            catch
+            {
+                return StatusCode(
+                    500,
+                    Utils.CommonResponse.SOMETHING_WENT_WRONG
+                );
+            }
+        }
+
+        [HttpGet("{learningPathId}/Departments")]
+        [Authorize]
+        public IActionResult GetDepartmentsOfALearningPath(int learningPathId)
+        {
+            try
+            {
+                if (_learningPathRepo.CheckIdExist(learningPathId) == false)
+                {
+                    return NotFound(
+                        Utils.CommonResponse.ObjectNotFound("learning path")
+                    );
+                }
+
+                var departments =
+                    _departmentLearningPathRepo.GetAllDepartmentsOfALearningPath(
+                        learningPathId
+                    );
+
+                return Ok(
+                    Utils.CommonResponse.GetAllObjectsSuccessfully(
+                        "certificated trainees",
+                        departments
                     )
                 );
             }

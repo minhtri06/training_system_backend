@@ -1,6 +1,8 @@
 using backend.Models;
 using backend.Dto.DepartmentLearningPath;
 using backend.Services.Interfaces;
+using backend.Dto.LearningPath;
+using backend.Dto.Department;
 
 namespace backend.Services.Repositories
 {
@@ -30,6 +32,17 @@ namespace backend.Services.Repositories
                     dlp =>
                         Utils.DtoConversion.ConvertDepartmentLearningPath(dlp)
                 )
+                .ToList();
+        }
+
+        public ICollection<DepartmentDto> GetAllDepartmentsOfALearningPath(
+            int learningPathId
+        )
+        {
+            return _context.DepartmentLearningPaths
+                .Where(dlp => dlp.LearningPathId == learningPathId)
+                .Select(dlp => dlp.Department)
+                .Select(d => Utils.DtoConversion.ConvertDepartment(d))
                 .ToList();
         }
 
