@@ -1,3 +1,5 @@
+using backend.Models;
+
 namespace backend.Dto.TraineeClass
 {
     public class TraineeClassDto

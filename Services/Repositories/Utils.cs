@@ -13,6 +13,7 @@ using backend.Models;
 using backend.Dto.LearningPathCertificate;
 using backend.Dto.LearningPathCourse;
 using backend.Dto.Trainer;
+using backend.Dto.TraineeClass;
 
 namespace backend.Services.Repositories
 {
@@ -185,9 +186,11 @@ namespace backend.Services.Repositories
             {
                 return new TraineeClassDto()
                 {
-                    TraineeId = traineeClass
-                    LearningPathId = traineeClass.LearningPathId,
-                    CourseOrder = traineeClass.CourseOrder
+                    TraineeId = traineeClass.TraineeId,
+                    ClassId = traineeClass.ClassId,
+                    GPA = traineeClass.GPA,
+                    status = traineeClass.status,
+                    CourseId = traineeClass.CourseId
                 };
             }
         }

@@ -15,7 +15,9 @@ namespace backend.Services.Repositories
 
         public bool CheckIdExist(int traineeId, int classId)
         {
-            return _context.TraineeClasses.Any(tc => tc.TraineeId == traineeId && tc.ClassId == classId);
+            return _context.TraineeClasses.Any(
+                tc => tc.TraineeId == traineeId && tc.ClassId == classId
+            );
         }
 
         public TraineeClassDto GetById(int traineeId, int classId)
@@ -29,8 +31,8 @@ namespace backend.Services.Repositories
 
         public ICollection<TraineeClassDto> GetAll()
         {
-            var traineeClassDtos = _context.TraineeClasss
-                .Select(lpco => Utils.DtoConversion.ConvertTraineeClass(lpco))
+            var traineeClassDtos = _context.TraineeClasses
+                .Select(tc => Utils.DtoConversion.ConvertTraineeClass(tc))
                 .ToList();
 
             return traineeClassDtos;
@@ -38,14 +40,15 @@ namespace backend.Services.Repositories
 
         public TraineeClassDto Create(NewTraineeClassDto newTraineeClassDto)
         {
+            if (newTraineeClassDto.GPA) { }
             var traineeClass = new TraineeClass()
             {
-                CourseId = newTraineeClassDto.CourseId,
-                LearningPathId = newTraineeClassDto.LearningPathId,
-                CourseOrder = newTraineeClassDto.CourseOrder
+                TraineeId = newTraineeClassDto.TraineeId,
+                ClassId = newTraineeClassDto.ClassId,
+                GPA = newTraineeClassDto.GPA
             };
 
-            _context.TraineeClasss.Add(traineeClass);
+            _context.TraineeClasses.Add(traineeClass);
             _context.SaveChanges();
 
             return Utils.DtoConversion.ConvertTraineeClass(traineeClass);
@@ -53,8 +56,10 @@ namespace backend.Services.Repositories
 
         public TraineeClassDto DeleteById(int traineeId, int classId)
         {
-            var traineeClass = _context.TraineeClasss.Single(
-                lpco => lpco.CourseId == courseId && lpco.LearningPathId == learningPathId
+            var traineeClass = _context.TraineeClasses.Single(
+                tc =>
+                    tc.CourseId == courseId
+                    && tc.LearningPathId == learningPathId
             );
 
             _context.TraineeClasss.Remove(traineeClass);
@@ -64,12 +69,15 @@ namespace backend.Services.Repositories
         }
 
         public TraineeClassDto Update(
-            int traineeId, int classId,
+            int traineeId,
+            int classId,
             UpdateTraineeClassDto updateTraineeClassDto
         )
         {
             var traineeClass = _context.TraineeClasss.Single(
-                lpc => lpc.CourseId == courseId && lpc.LearningPathId == learningPathId
+                lpc =>
+                    lpc.CourseId == courseId
+                    && lpc.LearningPathId == learningPathId
             );
 
             Utils.EntityMapping.MapTraineeClassFromDto(
