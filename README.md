@@ -1,8 +1,5 @@
 ## Training System Backend
 
-This project is not finished yet
+This repository was implemented as a back-end for my project at university. It use asp.net api for making api as well as JWT token for authentication and authorization.
 
-### ER Model
-
-https://app.diagrams.net/#G1IfhOf_3fPsRO6vTOtwwcPQ5syhBoDLY4
-
+front-end: https://github.com/toaingo2108/training-system-fe
